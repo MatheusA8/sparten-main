@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>Dashboard - Sparten</title>
+    <style>
+        .dashboard-container {
+            min-height: 100vh;
+            padding: 100px 20px 50px;
+        }
+
+        .dashboard-header {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #ff0000;
+            margin: 0;
+        }
+
+        .btn-sair {
+            background: #ff0000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-sair:hover {
+            background: #ff3333;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .dashboard-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.ativo {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .tab-btn:hover {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.ativo {
+            display: block;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: #ff0000;
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            color: #fff;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+
+        .card-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .codigo-badge {
+            background: #0f0;
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: monospace;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .btn-cancelar {
+            background: #ff3333;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-cancelar:hover {
+            background: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .btn-agendar {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .btn-agendar:hover {
+            background: #0f0;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        .vazio {
+            text-align: center;
+            padding: 40px 20px;
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        .vazio p {
+            margin: 10px 0;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ff0000;
+            padding: 20px;
+        }
+
+        .perfil-info {
+            background: rgba(255, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .perfil-info h2 {
+            color: #ff0000;
+            margin-top: 0;
+        }
+
+        .perfil-info p {
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo flutuante -->
+    <img src="images/PNGlogo-Photoroom.png" alt="Logo" class="logo-flutuante-global">
+
+    <!-- Header fixo -->
+    <header>    
+        <button class="menu-btn">•••</button>
+        <ul class="menu">
+            <li><a href="index.html#inicio">INÍCIO</a></li>
+            <li><a href="index.html#sobre">SOBRE</a></li>
+            <li><a href="index.html#planos">PLANOS E VALORES</a></li>
+            <li><a href="index.html#estrutura">ESTRUTURA</a></li>
+            <li><a href="index.html#equipe">EQUIPE</a></li>
+            <li><a href="index.html#clientes">CLIENTES</a></li>
+            <li><a href="index.html#localizacao">LOCALIZAÇÃO</a></li>
+            <li><a href="index.html#horarios">HORÁRIOS</a></li>
+            <li><a href="index.html#contatos">CONTATOS</a></li>
+        </ul>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>MEU DASHBOARD</h1>
+            <button class="btn-sair" onclick="sair()">SAIR</button>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Perfil -->
+            <div class="perfil-info" id="perfilInfo">
+                <h2>Bem-vindo!</h2>
+                <p id="nomeUsuario"></p>
+                <p id="emailUsuario"></p>
+            </div>
+
+            <!-- Abas -->
+            <div class="dashboard-tabs">
+                <button class="tab-btn ativo" onclick="abrirAba('agendamentos')">Meus Agendamentos</button>
+                <button class="tab-btn" onclick="abrirAba('inscricoes')">Minhas Inscrições</button>
+                <button class="tab-btn" onclick="abrirAba('aulas')">Aulas Disponíveis</button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+
+            <!-- Agendamentos -->
+            <div id="agendamentos" class="tab-content ativo">
+                <div class="loading" id="loadingAgendamentos">Carregando agendamentos...</div>
+                <div id="agendamentosConteudo"></div>
+            </div>
+
+            <!-- Inscrições -->
+            <div id="inscricoes" class="tab-content">
+                <div class="loading" id="loadingInscricoes">Carregando inscrições...</div>
+                <div id="inscricoesConteudo"></div>
+            </div>
+
+            <!-- Aulas Disponíveis -->
+            <div id="aulas" class="tab-content">
+                <button class="btn-agendar" onclick="window.location.href='agendar-teste.html'">AGENDAR AULA TESTE GRÁTIS</button>
+                <div class="loading" id="loadingAulas">Carregando aulas...</div>
+                <div id="aulasConteudo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="style/script.js" defer></script>
+    <script>
+        // Verificar login
+        function verificarLogin() {
+            // Se não estiver logado, redirecionar para login
+            // (isso seria verificado via PHP session)
+            carregarDados();
+        }
+
+        function abrirAba(aba) {
+            // Esconder todas as abas
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('ativo');
+            });
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('ativo');
+            });
+
+            // Mostrar aba selecionada
+            document.getElementById(aba).classList.add('ativo');
+            event.target.classList.add('ativo');
+
+            // Carregar dados se necessário
+            if (aba === 'agendamentos') {
+                carregarAgendamentos();
+            } else if (aba === 'inscricoes') {
+                carregarInscricoes();
+            } else if (aba === 'aulas') {
+                carregarAulas();
+            }
+        }
+
+        async function carregarDados() {
+            // Aqui você carregaria os dados do usuário via PHP
+            // Por enquanto, vamos usar dados de exemplo
+            document.getElementById('nomeUsuario').textContent = 'Bem-vindo, Usuário!';
+            document.getElementById('emailUsuario').textContent = 'usuario@email.com';
+            
+            carregarAgendamentos();
+        }
+
+        async function carregarAgendamentos() {
+            const conteudo = document.getElementById('agendamentosConteudo');
+            const loading = document.getElementById('loadingAgendamentos');
+
+            try {
+                const response = await fetch('api/get_agendamentos.php');
+                const data = await response.json();
+
+                loading.style.display = 'none';
+
+                if (data.sucesso && data.dados.length > 0) {
+                    let html = '<div class="card-container">';
+                    data.dados.forEach(agendamento => {
+                        html += `
+                            <div class="card">
+                                <h3>Aula Teste Agendada</h3>
+                                <div class="card-info">
+                                    <strong>Data:</strong> ${formatarData(agendamento.data_agendamento)}<br>
+                                    <strong>Horário:</strong> ${agendamento.horario}<br>
+                                    <strong>Nível:</strong> ${agendamento.nivel}
+                                </div>
+                                <p><strong>Seu código:</strong></p>
+                                <div class="codigo-badge">${agendamento.codigo_unico}</div>
+                                <p style="font-size: 0.9rem; opacity: 0.7;">Guarde este código para apresentar na academia</p>
+                                ${agendamento.status === 'confirmado' ? `
+                                    <button class="btn-cancelar" onclick="cancelarAgendamento(${agendamento.id})">CANCELAR AGENDAMENTO</button>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    conteudo.innerHTML = html;
+                } else {
+                    conteudo.innerHTML = `
+                        <div class="vazio">
+                            <p>Você não tem agendamentos</p>
+                            <button class="btn-agendar" onclick="window.location.href='agendar-teste.html'">AGENDAR AGORA</button>
+                        </div>
+                    `;
+                }
+            } catch (erro) {
+                loading.style.display = 'none';
+                conteudo.innerHTML = '<p style="color: #ff3333;">Erro ao carregar agendamentos</p>';
+                console.error(erro);
+            }
+        }
+
+        async function carregarInscricoes() {
+            const conteudo = document.getElementById('inscricoesConteudo');
+            const loading = document.getElementById('loadingInscricoes');
+
+            try {
+                const response = await fetch('api/get_inscricoes.php');
+                const data = await response.json();
+
+                loading.style.display = 'none';
+
+                if (data.sucesso && data.dados.length > 0) {
+                    let html = '<div class="card-container">';
+                    data.dados.forEach(inscricao => {
+                        html += `
+                            <div class="card">
+                                <h3>${inscricao.nome}</h3>
+                                <div class="card-info">
+                                    <strong>Instrutor:</strong> ${inscricao.instrutor}<br>
+                                    <strong>Horário:</strong> ${inscricao.horario}<br>
+                                    <strong>Nível:</strong> ${inscricao.nivel}
+                                </div>
+                                <p>${inscricao.descricao}</p>
+                                <button class="btn-cancelar" onclick="cancelarInscricao(${inscricao.inscricao_id})">CANCELAR INSCRIÇÃO</button>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    conteudo.innerHTML = html;
+                } else {
+                    conteudo.innerHTML = `
+                        <div class="vazio">
+                            <p>Você não está inscrito em nenhuma aula</p>
+                            <button class="btn-agendar" onclick="document.querySelector('[onclick=\\\"abrirAba(\\'aulas\\')\\\"]').click()">VER AULAS DISPONÍVEIS</button>
+                        </div>
+                    `;
+                }
+            } catch (erro) {
+                loading.style.display = 'none';
+                conteudo.innerHTML = '<p style="color: #ff3333;">Erro ao carregar inscrições</p>';
+                console.error(erro);
+            }
+        }
+
+        async function carregarAulas() {
+            const conteudo = document.getElementById('aulasConteudo');
+            const loading = document.getElementById('loadingAulas');
+
+            try {
+                const response = await fetch('api/get_aulas.php');
+                const data = await response.json();
+
+                loading.style.display = 'none';
+
+                if (data.sucesso && data.dados.length > 0) {
+                    let html = '<div class="card-container">';
+                    data.dados.forEach(aula => {
+                        const vagasDisponiveis = aula.vagas_disponiveis > 0;
+                        html += `
+                            <div class="card">
+                                <h3>${aula.nome}</h3>
+                                <div class="card-info">
+                                    <strong>Instrutor:</strong> ${aula.instrutor}<br>
+                                    <strong>Horário:</strong> ${aula.horario}<br>
+                                    <strong>Nível:</strong> ${aula.nivel}<br>
+                                    <strong>Vagas:</strong> ${aula.vagas_disponiveis}/${aula.capacidade}
+                                </div>
+                                <p>${aula.descricao}</p>
+                                ${vagasDisponiveis ? `
+                                    <button class="btn-agendar" style="margin-top: 10px; background: #0f0; color: #000;" onclick="inscreverAula(${aula.id})">INSCREVER-SE</button>
+                                ` : `
+                                    <p style="color: #ff3333; font-weight: bold;">Aula cheia</p>
+                                `}
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    conteudo.innerHTML = html;
+                } else {
+                    conteudo.innerHTML = '<p style="color: #fff;">Nenhuma aula disponível no momento</p>';
+                }
+            } catch (erro) {
+                loading.style.display = 'none';
+                conteudo.innerHTML = '<p style="color: #ff3333;">Erro ao carregar aulas</p>';
+                console.error(erro);
+            }
+        }
+
+        async function inscreverAula(aulaId) {
+            try {
+                const formData = new FormData();
+                formData.append('aula_id', aulaId);
+
+                const response = await fetch('api/inscrever.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    alert('Inscrição realizada com sucesso!');
+                    carregarInscricoes();
+                    carregarAulas();
+                } else {
+                    alert(data.mensagem);
+                }
+            } catch (erro) {
+                alert('Erro ao inscrever');
+                console.error(erro);
+            }
+        }
+
+        async function cancelarAgendamento(agendamentoId) {
+            if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
+
+            try {
+                const formData = new FormData();
+                formData.append('agendamento_id', agendamentoId);
+
+                const response = await fetch('api/cancelar_agendamento.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    alert('Agendamento cancelado');
+                    carregarAgendamentos();
+                } else {
+                    alert(data.mensagem);
+                }
+            } catch (erro) {
+                alert('Erro ao cancelar');
+                console.error(erro);
+            }
+        }
+
+        async function cancelarInscricao(inscricaoId) {
+            if (!confirm('Tem certeza que deseja cancelar esta inscrição?')) return;
+
+            try {
+                const formData = new FormData();
+                formData.append('inscricao_id', inscricaoId);
+
+                const response = await fetch('api/cancelar_inscricao.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    alert('Inscrição cancelada');
+                    carregarInscricoes();
+                    carregarAulas();
+                } else {
+                    alert(data.mensagem);
+                }
+            } catch (erro) {
+                alert('Erro ao cancelar');
+                console.error(erro);
+            }
+        }
+
+        function formatarData(data) {
+            const date = new Date(data + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function sair() {
+            if (confirm('Deseja sair?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Carregar dados ao abrir a página
+        verificarLogin();
+    </script>
+</body>
+</html>

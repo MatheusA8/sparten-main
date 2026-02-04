@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <title>Cadastro - Sparten</title>
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .auth-form {
+            background: rgba(255, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .auth-form h1 {
+            font-size: 2.5rem;
+            color: #ff0000;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            background: #ff3333;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .auth-link a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .auth-link a:hover {
+            color: #ff3333;
+        }
+
+        .mensagem {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .mensagem.sucesso {
+            background: rgba(0, 255, 0, 0.2);
+            color: #0f0;
+            border: 1px solid #0f0;
+        }
+
+        .mensagem.erro {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff3333;
+            border: 1px solid #ff3333;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo flutuante -->
+    <img src="images/PNGlogo-Photoroom.png" alt="Logo" class="logo-flutuante-global">
+
+    <!-- Header fixo -->
+    <header>    
+        <button class="menu-btn">•••</button>
+        <ul class="menu">
+            <li><a href="index.html#inicio">INÍCIO</a></li>
+            <li><a href="index.html#sobre">SOBRE</a></li>
+            <li><a href="index.html#planos">PLANOS E VALORES</a></li>
+            <li><a href="index.html#estrutura">ESTRUTURA</a></li>
+            <li><a href="index.html#equipe">EQUIPE</a></li>
+            <li><a href="index.html#clientes">CLIENTES</a></li>
+            <li><a href="index.html#localizacao">LOCALIZAÇÃO</a></li>
+            <li><a href="index.html#horarios">HORÁRIOS</a></li>
+            <li><a href="index.html#contatos">CONTATOS</a></li>
+        </ul>
+    </header>
+
+    <div class="auth-container">
+        <form class="auth-form" id="formCadastro">
+            <h1>CADASTRO</h1>
+            
+            <div class="mensagem" id="mensagem"></div>
+
+            <div class="form-group">
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone (WhatsApp)</label>
+                <input type="tel" id="telefone" name="telefone" placeholder="(XX) 9XXXX-XXXX" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar Senha</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita sua senha" required>
+            </div>
+
+            <div class="loading" id="loading">
+                <p>Cadastrando...</p>
+            </div>
+
+            <button type="submit" class="btn-submit">CADASTRAR</button>
+
+            <div class="auth-link">
+                Já tem conta? <a href="login.html">Faça login aqui</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="style/script.js" defer></script>
+    <script>
+        const formCadastro = document.getElementById('formCadastro');
+        const mensagem = document.getElementById('mensagem');
+        const loading = document.getElementById('loading');
+
+        formCadastro.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('telefone').value;
+            const senha = document.getElementById('senha').value;
+            const confirmar_senha = document.getElementById('confirmar_senha').value;
+
+            // Validações básicas
+            if (nome.length < 3) {
+                mostrarMensagem('Nome deve ter pelo menos 3 caracteres', 'erro');
+                return;
+            }
+
+            if (senha.length < 6) {
+                mostrarMensagem('Senha deve ter pelo menos 6 caracteres', 'erro');
+                return;
+            }
+
+            if (senha !== confirmar_senha) {
+                mostrarMensagem('Senhas não conferem', 'erro');
+                return;
+            }
+
+            loading.style.display = 'block';
+
+            try {
+                const formData = new FormData();
+                formData.append('nome', nome);
+                formData.append('email', email);
+                formData.append('telefone', telefone);
+                formData.append('senha', senha);
+                formData.append('confirmar_senha', confirmar_senha);
+
+                const response = await fetch('api/cadastro.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    mostrarMensagem('Cadastro realizado com sucesso! Redirecionando...', 'sucesso');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    mostrarMensagem(data.mensagem, 'erro');
+                }
+            } catch (erro) {
+                mostrarMensagem('Erro ao cadastrar. Tente novamente.', 'erro');
+                console.error(erro);
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+
+        function mostrarMensagem(texto, tipo) {
+            mensagem.textContent = texto;
+            mensagem.className = 'mensagem ' + tipo;
+            mensagem.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,805 @@
+/* reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+html, body {
+    height: 100%;
+    width: 100%;
+}
+body {
+    background-color: black;
+    color: white;
+}
+/* logo flutuante */
+.logo-flutuante {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;       /* aumenta a largura */
+    opacity: 0.5;      /* deixa mais transparente, menos escuro */
+    pointer-events: none;
+    z-index: -1; 
+}
+/* header fixo */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #111;
+    padding: 15px 20px;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+header ul {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    list-style: none;
+}
+header ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+header ul li a:hover {
+    color: #e63946;
+}
+/* botão do mobile */
+.menu-btn {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    z-index: 1100;
+}
+/* main centralizado */
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    padding: 0 20px;
+    z-index: 1;
+    position: relative;
+}
+/* título */
+h1 {
+    font-size: clamp(28px, 6vw, 80px);
+    color: #ff0000;
+    margin-bottom: 15px; 
+    animation: fadeIn 1s ease-in-out forwards;
+}
+/* frase */
+main p {
+    font-size: 1.5rem;
+    color: #fff;
+    opacity: 0.8;
+    font-style: italic;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+/* Mobile */
+@media (max-width: 768px) {
+    header {
+        justify-content: flex-start;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        background: #111;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+        padding: 0;
+        overflow: hidden;
+        max-height: 0; /* escondido */
+        transition: max-height 0.6s ease-in-out, padding 0.6s ease-in-out; /* transição mais lenta e suave */
+        border-radius: 5px;
+        z-index: 1001;
+    }
+
+    .menu.active {
+        max-height: 600px; /* altura suficiente para todos os itens */
+        padding: 15px;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+}
+.sobre {
+    padding: 80px 20px;
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.sobre h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 40px;
+    color: #ff0000;
+}
+.sobre-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+.sobre-text {
+    flex: 1;
+    min-width: 250px;
+}
+.text-bg {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    animation: fadeIn 1s ease forwards;
+}
+.text-bg p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+
+
+
+
+/* SOBRE */
+.sobre-imagem {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 50px; /* distancia da seção de cima */
+    animation: fadeIn 1s ease forwards;
+    box-shadow: 0 0 30px rgba(255,0,0,0.3); 
+    border-radius: 15px; 
+    border: 3px solid #ff0000;
+    background: rgba(255,0,0,0.1);
+}
+#canvas-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+.sobre-img {
+    width: 100%;
+    height: 100%; /* preenche todo o container */
+    display: block;
+    object-fit: cover; /* mantém proporção e cobre todo o container */
+    object-position: top; /* garante que a parte de cima apareça */
+}
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 768px) {
+    .planos-content {
+        flex-direction: column; /* uma coluna */
+        align-items: center;    /* centraliza cada card */
+        gap: 20px;              /* mantém o espaçamento */
+    }
+
+    .plano {
+        max-width: 90%;         /* ocupa quase toda a tela no celular */
+    }
+}
+
+
+
+
+
+/* PLANOS */
+.planos {
+    background-color: #1c1c1c; /* cor de fundo diferente da seção Sobre */
+    color: #fff;
+    padding: 100px 20px 60px 20px;
+    text-align: center;
+    position: relative;
+}
+.planos h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 60px;
+    color: #ff0000; /* vermelho da academia */
+    position: relative;
+    z-index: 2;
+}
+.planos-content {
+    display: flex;
+    justify-content: center; /* centraliza horizontalmente */
+    flex-wrap: wrap;         /* permite quebrar em várias linhas no mobile */
+    gap: 20px;               /* espaçamento entre os cards */
+    position: relative;
+    z-index: 2;
+}
+/* Cards dos planos */
+.plano {
+    background: rgba(255,0,0,0.15); /* filtro vermelho em todos */
+    backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    border-radius: 15px;
+    flex: 1;
+    min-width: 220px;
+    max-width: 250px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+/* Hover nos cards */
+.plano:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(255,0,0,0.3);
+}
+/* Plano Diário destaque */
+.plano.diaria {
+    border: 2px solid gold; /* borda dourada */
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3); /* sombra leve dourada */
+}
+/* Plano destaque (Anual) */
+.plano.destaque {
+    background: rgba(255,0,0,0.15);
+    border: 2px solid #ff0000;
+}
+/* Títulos dos planos */
+.plano h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #ff0000;
+}
+/* Valores */
+.plano p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+/* Transição suave da seção Sobre para Planos */
+.sobre::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), #1c1c1c);
+    pointer-events: none;
+}
+
+
+
+
+
+.estrutura {
+    background-color: #111;
+    color: #fff;
+    padding: 100px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.estrutura h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 40px;
+    color: #ff0000;
+}
+/* Carrossel horizontal */
+.estrutura-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 30px;
+    scroll-behavior: smooth;
+    padding-bottom: 20px;
+}
+.estrutura-carousel::-webkit-scrollbar {
+    height: 10px;
+}
+.estrutura-carousel::-webkit-scrollbar-thumb {
+    background-color: #ff0000;
+    border-radius: 5px;
+}
+.estrutura-card {
+    display: flex;
+    flex-direction: column; /* mantém o texto em cima e imagem embaixo */
+    background: rgba(255,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    min-width: 250px;
+    max-width: 300px;
+    flex: 0 0 auto;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+.estrutura-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(255,0,0,0.3);
+}
+.estrutura-card img {
+    width: 100%;        /* ocupa toda a largura do card */
+    max-width: 250px;   /* limita o tamanho máximo, igual aos outros cards */
+    height: auto;       /* mantém a proporção da imagem */
+    border-radius: 10px;
+    margin-top: 15px;   /* espaço entre o texto e a imagem */
+    animation: float 6s ease-in-out infinite;
+}
+.estrutura-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #ff0000;
+}
+.estrutura-card p {
+    font-size: 1rem;
+    line-height: 1.4;
+    opacity: 0.85;
+}
+/* Destaque para novidades */
+.estrutura-card.novidade {
+    border: 2px dashed #ff0000;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+    50% { box-shadow: 0 0 20px rgba(255,0,0,0.6); }
+    100% { box-shadow: 0 0 10px rgba(255,0,0,0.3); }
+}
+/* Desktop: centraliza os cards horizontalmente */
+@media (min-width: 769px) {
+    .estrutura-carousel {
+        justify-content: center;
+    }
+}
+
+
+
+
+
+
+.equipe {
+    padding: 80px 20px;
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+}
+.equipe h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 50px;
+    color: #ff0000;
+}
+/* Grid para organizar os membros */
+.equipe-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 5px; /* bem próximo horizontalmente */
+    row-gap: 20px;    /* mantém o espaço vertical */
+    justify-items: center;
+}
+/* Box do membro */
+.membro {
+    background: rgba(255,0,0,0.15);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+/* Cabeçalho */
+.membro-header {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+/* Corpo */
+.membro-body {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 0;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+}
+/* Imagem */
+.membro-body img {
+    width: 100%;
+    max-width: 200px;
+    display: block;
+    margin: 0 auto 15px;
+    border-radius: 10px;
+}
+/* Texto */
+.membro-body p {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #fff;
+    opacity: 0.9;
+}
+/* Quando expandido (mobile) */
+.membro.active .membro-body {
+    max-height: 1000px;
+    padding: 15px 0;
+}
+/* === Desktop: mostrar tudo aberto === */
+@media (min-width: 769px) {
+    .membro-body {
+        max-height: 1000px;
+        padding: 15px 0;
+    }
+}
+/* === Mobile: grid 1 coluna e header menor === */
+@media (max-width: 768px) {
+    .equipe-content {
+        grid-template-columns: 1fr;
+    }
+
+    .membro-header {
+        font-size: 1.2rem;
+    }
+
+    .membro-body img {
+        max-width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.clientes {
+    padding: 80px 20px;
+    background-color: #1c1c1c;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+.clientes h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 50px;
+    color: #ff0000;
+}
+.clientes-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+.clientes-track {
+    display: flex;
+    gap: 20px;
+}
+.cliente-box {
+    flex: 0 0 200px; /* largura fixa */
+    height: 200px;   /* quadrado */
+    background: rgba(255,0,0,0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.cliente {
+  flex: 0 0 200px; /* largura fixa para não encolher */
+  height: 200px;
+  background: rgba(255,0,0,0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+/* Animação infinita de scroll */
+@keyframes scrollClientes {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* ajustar conforme duplicação dos itens */
+}
+
+
+
+
+
+.localizacao {
+    padding: 80px 20px;
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+}
+.localizacao h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 50px;
+    color: #ff0000;
+}
+.localizacao-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    align-items: flex-start;
+}
+.localizacao-item img {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 12px;
+    border: 3px solid #ff0000; /* mantém a borda vermelha */
+    box-shadow: 0 0 20px rgba(255,0,0,0.4);
+}
+.localizacao-item iframe {
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255,0,0,0.4);
+    width: 100%;
+    max-width: 400px; /* mesmo tamanho da foto */
+    height: 400px;     /* mesma altura da foto */
+}
+/* Textos */
+.localizacao-chamada,
+.localizacao-endereco {
+    margin-top: 20px;
+    font-size: 1.4rem; /* um pouco maior */
+    color: #ffffff;       /* sem vermelho */
+    text-align: center;
+    font-weight: bold;
+}
+.localizacao-chamada {
+    margin-top: 10px; /* reduz espaço acima */
+    margin-bottom: 50px; /* mantém distância das boxes */
+    font-size: 1.3rem;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+/* Mobile */
+@media (max-width: 768px) {
+    .localizacao-content {
+        flex-direction: column; /* empilhados */
+        gap: 20px;
+        align-items: center; /* garante centralização horizontal */
+    }
+
+    .localizacao-item img,
+    .localizacao-item iframe {
+        max-width: 100%;
+        width: 100%;   /* força ocupar toda largura disponível */
+        height: 300px; /* altura menor para mobile */
+    }
+}
+
+
+
+
+
+.horarios {
+    padding: 80px 20px;
+    text-align: center;
+    background-color: #111;
+    color: #fff;
+}
+.horarios h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 50px;
+    color: #ff0000;
+}
+.horario-status {
+    font-size: 3rem;
+    font-weight: bold;
+    padding: 40px;
+    border-radius: 20px;
+    display: inline-block;
+    transition: all 0.5s ease;
+    box-shadow: 0 0 40px rgba(255,0,0,0.5);
+}
+.horarios-card {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #111;
+    color: #fff;
+}
+.horarios-card h2 {
+    font-size: clamp(24px, 4vw, 40px);
+    margin-bottom: 30px;
+    color: #ff0000;
+}
+.card-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(255,0,0,0.1);
+    padding: 20px 30px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(255,0,0,0.3);
+    transition: all 0.5s ease;
+}
+#status-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f00;
+    box-shadow: 0 0 15px rgba(255,0,0,0.6);
+    transition: all 0.5s ease;
+}
+.status-info {
+    text-align: left;
+}
+.status-info span {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.status-info p {
+    font-size: 1.2rem;      /* aumenta o tamanho do texto */
+    line-height: 1.8;       /* deixa o espaçamento entre linhas maior */
+    font-weight: 500;       /* dá um leve destaque */
+    margin: 0;              /* remove margens desnecessárias */
+}
+
+
+
+
+
+/* Canvas de partículas global (já existente) */
+canvas#canvas-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* atrás de tudo */
+}
+
+/* Logo flutuante global */
+.logo-flutuante-global {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px; /* ajuste do tamanho da logo */
+    opacity: 0.5; /* suave, fundo */
+    z-index: -1; /* entre o canvas e o conteúdo */
+}
+
+/* Seção de contatos ocupando a tela inteira */
+.contatos-fullscreen {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* garante altura mínima da tela */
+    background-color: transparent; /* transparente para a logo e partículas aparecerem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-direction: column; /* mantém o conteúdo empilhado verticalmente */
+}
+
+.contatos-fullscreen .contatos-content {
+    position: relative;
+    z-index: 1; /* conteúdo acima de tudo */
+    text-align: center;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.contatos-fullscreen h2 {
+    font-size: clamp(28px, 5vw, 50px);
+    margin-bottom: 30px;
+    color: #ff0000;
+}
+
+.contatos-fullscreen p {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.contatos-info p {
+    margin: 10px 0;
+}
+
+/* Texto de direitos reservados */
+.direitos {
+    margin-top: 40px; /* distância do conteúdo acima */
+    font-size: 0.9rem;
+    color: #fff;
+    opacity: 0.8;
+}
+
+
+
+
+
+/* DETALHES SIMPLES */
+.equipe img {
+    width: 100%;
+    height: auto; /* mantém proporção */
+    object-fit: cover; /* ou contain dependendo do efeito que você quiser */
+    border-radius: 10px;
+}
+.foto-academia {
+    width: 100%;
+    height: auto; /* evita distorção */
+    object-fit: cover;
+}
+@media (min-width: 1024px) {
+    .equipe img {
+        max-width: 300px; /* controla tamanho em telas grandes */
+        height: auto;
+    }
+
+    .foto-academia {
+        max-height: 500px; /* limita altura */
+    }
+}
+
+
+
+
+
+.transicao {
+    height: 80px; /* altura do degradê */
+    width: 100%;
+}
+
+.planos-para-estrutura {
+    height: 80px; /* altura do degradê */
+    width: 100%;
+    background: linear-gradient(to bottom, #1C1C1C, #111); /* de cinza (planos) para preto (estrutura) */
+}
+.equipe-para-clientes {
+    height: 80px; /* altura do degradê */
+    width: 100%;
+    background: linear-gradient(to bottom, #111, #1c1c1c); /* de preto (equipe) para cinza escuro (clientes) */
+}
+.clientes-para-localizacao {
+    height: 80px; /* altura do degradê, pode ajustar */
+    width: 100%;
+    background: linear-gradient(to bottom, #1c1c1c, #111); /* de cinza escuro (clientes) para preto (localização) */
+}
+html {
+    scroll-behavior: smooth;
+}
