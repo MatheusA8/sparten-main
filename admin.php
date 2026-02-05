@@ -1,3 +1,22 @@
+<?php
+session_start();
+require_once __DIR__ . '/api/auth.php';
+verificar_login();
+
+
+// se não estiver logado
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: login.html");
+    exit;
+}
+
+// se estiver logado mas NÃO for admin
+if ($_SESSION['usuario_tipo'] !== 'admin') {
+    header("Location: dashboard.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -286,15 +305,15 @@
     <header>    
         <button class="menu-btn">•••</button>
         <ul class="menu">
-            <li><a href="index.html#inicio">INÍCIO</a></li>
-            <li><a href="index.html#sobre">SOBRE</a></li>
-            <li><a href="index.html#planos">PLANOS E VALORES</a></li>
-            <li><a href="index.html#estrutura">ESTRUTURA</a></li>
-            <li><a href="index.html#equipe">EQUIPE</a></li>
-            <li><a href="index.html#clientes">CLIENTES</a></li>
-            <li><a href="index.html#localizacao">LOCALIZAÇÃO</a></li>
-            <li><a href="index.html#horarios">HORÁRIOS</a></li>
-            <li><a href="index.html#contatos">CONTATOS</a></li>
+            <li><a href="index.php#inicio">INÍCIO</a></li>
+            <li><a href="index.php#sobre">SOBRE</a></li>
+            <li><a href="index.php#planos">PLANOS E VALORES</a></li>
+            <li><a href="index.php#estrutura">ESTRUTURA</a></li>
+            <li><a href="index.php#equipe">EQUIPE</a></li>
+            <li><a href="index.php#clientes">CLIENTES</a></li>
+            <li><a href="index.php#localizacao">LOCALIZAÇÃO</a></li>
+            <li><a href="index.php#horarios">HORÁRIOS</a></li>
+            <li><a href="index.php#contatos">CONTATOS</a></li>
         </ul>
     </header>
 
@@ -649,7 +668,7 @@
 
         function sair() {
             if (confirm('Deseja sair?')) {
-                window.location.href = 'index.html';
+                window.location.href = 'index.php';
             }
         }
 

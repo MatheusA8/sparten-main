@@ -143,15 +143,15 @@
     <header>    
         <button class="menu-btn">•••</button>
         <ul class="menu">
-            <li><a href="index.html#inicio">INÍCIO</a></li>
-            <li><a href="index.html#sobre">SOBRE</a></li>
-            <li><a href="index.html#planos">PLANOS E VALORES</a></li>
-            <li><a href="index.html#estrutura">ESTRUTURA</a></li>
-            <li><a href="index.html#equipe">EQUIPE</a></li>
-            <li><a href="index.html#clientes">CLIENTES</a></li>
-            <li><a href="index.html#localizacao">LOCALIZAÇÃO</a></li>
-            <li><a href="index.html#horarios">HORÁRIOS</a></li>
-            <li><a href="index.html#contatos">CONTATOS</a></li>
+            <li><a href="index.php">INÍCIO</a></li>
+            <li><a href="index.php#sobre">SOBRE</a></li>
+            <li><a href="index.php#planos">PLANOS E VALORES</a></li>
+            <li><a href="index.php#estrutura">ESTRUTURA</a></li>
+            <li><a href="index.php#equipe">EQUIPE</a></li>
+            <li><a href="index.php#clientes">CLIENTES</a></li>
+            <li><a href="index.php#localizacao">LOCALIZAÇÃO</a></li>
+            <li><a href="index.php#horarios">HORÁRIOS</a></li>
+            <li><a href="index.php#contatos">CONTATOS</a></li>
         </ul>
     </header>
 
@@ -184,57 +184,66 @@
     </div>
 
     <script src="style/script.js" defer></script>
-    <script>
-        const formLogin = document.getElementById('formLogin');
-        const mensagem = document.getElementById('mensagem');
-        const loading = document.getElementById('loading');
+<script>
+const formLogin = document.getElementById('formLogin');
+const mensagem = document.getElementById('mensagem');
+const loading = document.getElementById('loading');
 
-        formLogin.addEventListener('submit', async (e) => {
-            e.preventDefault();
+formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
+    const email = document.getElementById('email').value;
+    const senha = document.getElementById('senha').value;
 
-            if (!email || !senha) {
-                mostrarMensagem('Preencha todos os campos', 'erro');
-                return;
-            }
+    if (!email || !senha) {
+        mostrarMensagem('Preencha todos os campos', 'erro');
+        return;
+    }
 
-            loading.style.display = 'block';
+    loading.style.display = 'block';
 
-            try {
-                const formData = new FormData();
-                formData.append('email', email);
-                formData.append('senha', senha);
+    try {
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('senha', senha);
 
-                const response = await fetch('api/login.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.sucesso) {
-                    mostrarMensagem('Login realizado com sucesso! Redirecionando...', 'sucesso');
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2000);
-                } else {
-                    mostrarMensagem(data.mensagem, 'erro');
-                }
-            } catch (erro) {
-                mostrarMensagem('Erro ao fazer login. Tente novamente.', 'erro');
-                console.error(erro);
-            } finally {
-                loading.style.display = 'none';
-            }
+        const response = await fetch('api/login.php', {
+            method: 'POST',
+            body: formData
         });
 
-        function mostrarMensagem(texto, tipo) {
-            mensagem.textContent = texto;
-            mensagem.className = 'mensagem ' + tipo;
-            mensagem.style.display = 'block';
+        const data = await response.json();
+        console.log('Resposta do login:', data);
+
+        if (data.sucesso) {
+            mostrarMensagem('Login realizado! Redirecionando...', 'sucesso');
+
+            setTimeout(() => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    mostrarMensagem('Erro: redirecionamento não definido', 'erro');
+                }
+            }, 1200);
+
+        } else {
+            mostrarMensagem(data.mensagem || 'Erro ao fazer login', 'erro');
         }
-    </script>
+
+    } catch (erro) {
+        console.error(erro);
+        mostrarMensagem('Erro ao se conectar com o servidor', 'erro');
+    } finally {
+        loading.style.display = 'none';
+    }
+});
+
+function mostrarMensagem(texto, tipo) {
+    mensagem.textContent = texto;
+    mensagem.className = 'mensagem ' + tipo;
+    mensagem.style.display = 'block';
+}
+</script>
+
 </body>
 </html>

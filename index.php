@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +28,9 @@
             <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
             <li><a href="#horarios">HORÁRIOS</a></li>
             <li><a href="#contatos">CONTATOS</a></li>
+            <button onclick="window.location.href='api/logout.php'">Deslogar</button>
         </ul>
+        
     </header>
     <!-- Conteúdo centralizado -->
     <main id="inicio">
@@ -108,8 +114,10 @@
             <a href="../sparten-main/agendar-teste.html"><button>Agendar teste</button></a>
             <a href="../sparten-main/cadastro.html"><button>cadastro</button></a>
             <a href="../sparten-main/login.html"><button>login</button></a>
-            <a href="../sparten-main/admin.html"><button>admin</button></a>
-            <a href="../sparten-main/dashboard.html"><button>dashboard</button></a>
+            <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+            <a href="admin.php" class="btn-admin">ADMIN</a>
+            <?php endif; ?>
+            <a href="../sparten-main/dashboard.php"><button>dashboard</button></a>
         </div>
     </div>
 </section>
