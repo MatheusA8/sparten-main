@@ -122,6 +122,45 @@ session_start();
     </div>
 </section>
 
+
+<section id="servicos" class="servicos">
+    <h2>Nossos Serviços</h2>
+    <p class="servicos-subtitulo">Escolha a modalidade que mais combina com seus objetivos.</p>
+    <div class="servicos-grid">
+        <!-- Musculação -->
+        <div class="servico-card">
+            <h3>Musculação</h3>
+            <p>Treinos personalizados com equipamentos de última geração para ganho de massa, força e definição muscular.</p>
+            <a href="#planos" class="servico-btn">Ver Planos</a>
+        </div>
+
+        <!-- Spinning -->
+        <div class="servico-card">
+            <h3>Spinning</h3>
+            <p>Aulas dinâmicas de ciclismo indoor com alta queima calórica e melhora do condicionamento cardiovascular.</p>
+            <div class="spinning-box-btns">
+                <a href="spinning.html" class="servico-btn">Ver Aulas</a>
+                <a href="agendar-teste.html" class="servico-btn btn-teste">Agendar Teste</a>
+            </div>
+        </div>
+
+        <!-- Aeróbicos -->
+        <div class="servico-card">
+            <h3>Aeróbicos</h3>
+            <p>Atividades focadas na queima de gordura e resistência física, incluindo esteiras, elípticos e bikes.</p>
+            <a href="../sparten-main/aerobicos.php" class="servico-btn">Ver Planos</a>
+        </div>
+
+        <!-- Treino Funcional -->
+        <div class="servico-card">
+            <h3>Treino Funcional</h3>
+            <p>Exercícios que trabalham o corpo de forma integrada, melhorando mobilidade, equilíbrio e força funcional.</p>
+            <a href="../sparten-main/funcional.php" class="servico-btn">Ver Planos</a>
+        </div>
+    </div>
+</section>
+
+
 <section id="equipe" class="equipe">
     <h2>Nossa Equipe</h2>
     <div class="equipe-content">

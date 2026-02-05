@@ -60,3 +60,24 @@ INSERT INTO aulas_spinning (nome, instrutor, horario, nivel, capacidade, descric
 ('Spin & Burn', 'Marina Costa', '07:30 - 08:30', 'Avançado', 18, 'Queime calorias com intervalos intensos e música energética'),
 ('Spin Flow', 'Lucas Ferreira', '18:00 - 19:00', 'Iniciante', 25, 'Aula relaxante com foco em técnica e adaptação ao equipamento'),
 ('Night Ride', 'Ana Paula', '19:30 - 20:30', 'Avançado', 20, 'Simulação de trilhas com mudanças de ritmo e resistência');
+
+
+
+
+USE sparten_main;
+
+-- Adicionar coluna de modalidade na tabela de aulas para unificar
+ALTER TABLE aulas_spinning RENAME TO aulas;
+ALTER TABLE aulas ADD COLUMN modalidade ENUM('spinning', 'aerobicos', 'funcional') DEFAULT 'spinning' AFTER id;
+
+-- Inserir aulas de Aeróbicos
+INSERT INTO aulas (modalidade, nome, instrutor, horario, nivel, capacidade, descricao) VALUES
+('aerobicos', 'Hiit Cardio', 'Juliana Lima', '08:00 - 09:00', 'Intermediário', 15, 'Treino aeróbico de alta intensidade para queima rápida de gordura'),
+('aerobicos', 'Dance Fit', 'Ricardo Alves', '17:00 - 18:00', 'Iniciante', 30, 'Mistura de ritmos e exercícios aeróbicos de forma divertida'),
+('aerobicos', 'Running Club', 'Marcos Souza', '19:00 - 20:00', 'Avançado', 12, 'Treino focado em performance de corrida e resistência');
+
+-- Inserir aulas de Treino Funcional
+INSERT INTO aulas (modalidade, nome, instrutor, horario, nivel, capacidade, descricao) VALUES
+('funcional', 'Sparten WOD', 'Marlon', '07:00 - 08:00', 'Avançado', 15, 'Treino do dia focado em força funcional e condicionamento extremo'),
+('funcional', 'Core & Stability', 'Eduardo', '10:00 - 11:00', 'Iniciante', 20, 'Foco no fortalecimento do core e equilíbrio corporal'),
+('funcional', 'Functional Circuit', 'Lucas', '18:30 - 19:30', 'Intermediário', 18, 'Circuito dinâmico trabalhando todos os grupos musculares');
