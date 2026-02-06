@@ -22,12 +22,13 @@ session_start();
             <li><a href="#sobre">SOBRE</a></li>
             <li><a href="#planos">PLANOS E VALORES</a></li>
             <li><a href="#estrutura">ESTRUTURA</a></li>
-            <li><a href="spinning.html">SPINNING</a></li>
+            <li><a href="#servicos">SERVIÇOS</a></li>
             <li><a href="#equipe">EQUIPE</a></li>
             <li><a href="#clientes">CLIENTES</a></li>
             <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
             <li><a href="#horarios">HORÁRIOS</a></li>
             <li><a href="#contatos">CONTATOS</a></li>
+            <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
             <button onclick="window.location.href='api/logout.php'">Deslogar</button>
         </ul>
         
@@ -110,14 +111,13 @@ session_start();
             <h3>3º Andar</h3>
             <p>Novidades em breve! Preparado para surpreender.</p>
             <img src="../sparten-main/images/3d-question-mark-icon-or-ask-faq-answer-solution-isolated-on-transparent-background-file-png.webp" alt="3º Andar">
-            <a href="../sparten-main/spinning.html"><button>Spenning</button></a>
-            <a href="../sparten-main/agendar-teste.html"><button>Agendar teste</button></a>
-            <a href="../sparten-main/cadastro.html"><button>cadastro</button></a>
-            <a href="../sparten-main/login.html"><button>login</button></a>
-            <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
-            <a href="admin.php" class="btn-admin">ADMIN</a>
-            <?php endif; ?>
+
+
+
             <a href="../sparten-main/dashboard.php"><button>dashboard</button></a>
+
+
+
         </div>
     </div>
 </section>
@@ -139,7 +139,7 @@ session_start();
             <h3>Spinning</h3>
             <p>Aulas dinâmicas de ciclismo indoor com alta queima calórica e melhora do condicionamento cardiovascular.</p>
             <div class="spinning-box-btns">
-                <a href="spinning.html" class="servico-btn">Ver Aulas</a>
+                <a href="spinning.php" class="servico-btn">Ver Aulas</a>
                 <a href="agendar-teste.html" class="servico-btn btn-teste">Agendar Teste</a>
             </div>
         </div>

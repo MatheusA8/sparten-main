@@ -336,6 +336,15 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             <div id="aulas" class="tab-content ativo">
                 <div class="form-aula">
                     <h2 style="color: #ff0000; margin-top: 0;">Adicionar Nova Aula</h2>
+                    <div class="form-group">
+                        <label>Modalidade</label>
+                        <select id="modalidade" required>
+                            <option value="">Selecione</option>
+                            <option value="spinning">Spinning</option>
+                            <option value="aerobicos">Aeróbicos</option>
+                            <option value="funcional">Funcional</option>
+                        </select>
+                    </div>
                     <form id="formAula">
                         <div class="form-group">
                             <label>Nome da Aula</label>
@@ -394,44 +403,47 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
     <script>
         const formAula = document.getElementById('formAula');
 
-        formAula.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const nome = document.getElementById('nome').value;
-            const instrutor = document.getElementById('instrutor').value;
-            const horario = document.getElementById('horario').value;
-            const nivel = document.getElementById('nivel').value;
-            const capacidade = document.getElementById('capacidade').value;
-            const descricao = document.getElementById('descricao').value;
-
-            try {
-                const formData = new FormData();
-                formData.append('nome', nome);
-                formData.append('instrutor', instrutor);
-                formData.append('horario', horario);
-                formData.append('nivel', nivel);
-                formData.append('capacidade', capacidade);
-                formData.append('descricao', descricao);
-
-                const response = await fetch('api/admin_aulas.php?acao=adicionar', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.sucesso) {
-                    mostrarMensagem('Aula adicionada com sucesso!', 'sucesso');
-                    formAula.reset();
-                    carregarAulas();
-                } else {
-                    mostrarMensagem(data.mensagem, 'erro');
-                }
-            } catch (erro) {
-                mostrarMensagem('Erro ao adicionar aula', 'erro');
-                console.error(erro);
+    formAula.addEventListener('submit', async (e) => {
+        e.preventDefault();
+    
+        const modalidade = document.getElementById('modalidade').value;
+        const nome = document.getElementById('nome').value;
+        const instrutor = document.getElementById('instrutor').value;
+        const horario = document.getElementById('horario').value;
+        const nivel = document.getElementById('nivel').value;
+        const capacidade = document.getElementById('capacidade').value;
+        const descricao = document.getElementById('descricao').value;
+    
+        try {
+            const formData = new FormData();
+            formData.append('modalidade', modalidade);
+            formData.append('nome', nome);
+            formData.append('instrutor', instrutor);
+            formData.append('horario', horario);
+            formData.append('nivel', nivel);
+            formData.append('capacidade', capacidade);
+            formData.append('descricao', descricao);
+    
+            const response = await fetch('api/admin_aulas.php?acao=adicionar', {
+                method: 'POST',
+                body: formData
+            });
+    
+            const data = await response.json();
+    
+            if (data.sucesso) {
+                mostrarMensagem('Aula adicionada com sucesso!', 'sucesso');
+                formAula.reset();
+                carregarAulas();
+            } else {
+                mostrarMensagem(data.mensagem, 'erro');
             }
-        });
+        } catch (erro) {
+            mostrarMensagem('Erro ao adicionar aula', 'erro');
+            console.error(erro);
+        }
+    });
+    
 
         async function carregarAulas() {
             const container = document.getElementById('aulasTabela');

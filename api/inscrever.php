@@ -14,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Verificar login
 $usuario_id = verificar_login();
+if (!$usuario_id) {
+    resposta_json(false, 'Usuário não logado (debug)');
+}
+
 
 // Receber dados
 $aula_id = isset($_POST['aula_id']) ? (int)$_POST['aula_id'] : 0;
@@ -23,7 +27,7 @@ if (empty($aula_id)) {
 }
 
 // Verificar se aula existe
-$stmt = $conexao->prepare("SELECT id, capacidade FROM aulas_spinning WHERE id = ?");
+$stmt = $conexao->prepare("SELECT id, capacidade FROM aulas WHERE id = ?");
 $stmt->bind_param("i", $aula_id);
 $stmt->execute();
 $resultado = $stmt->get_result();

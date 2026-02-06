@@ -1,0 +1,9 @@
+Array
+(
+    [modalidade] => aerobicos
+    [instrutor] => Vinicius
+    [horario] => 20h - 21h
+    [nivel] => Intermediário
+    [capacidade] => 56743
+    [descricao] => egrthj
+)

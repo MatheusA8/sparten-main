@@ -227,6 +227,27 @@ session_start();
                 font-size: 1.5rem;
             }
         }
+
+.btn-sair {
+    background: #ff0000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+
+    display: block;
+    margin: 60px auto 0 auto; /* empurra pra baixo e centraliza */
+    text-align: center;
+}
+
+.btn-sair:hover {
+    background: #ff3333;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+}
+
     </style>
 </head>
 <body>
@@ -269,13 +290,17 @@ session_start();
         </div>
     </section>
 
+    <button class="btn-sair" onclick="window.location.href='index.php'">
+    SAIR
+</button>
+
     <script src="script.js" defer></script>
     <script>
         async function carregarAulas() {
             const container = document.getElementById('aulasContainer');
 
             try {
-                const response = await fetch('api/get_aulas.php?modalidade=aerobicos');
+                const response = await fetch('api/get_aulas.php?modalidade=funcional');
                 const data = await response.json();
 
                 if (data.sucesso && data.dados.length > 0) {
