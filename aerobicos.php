@@ -1,6 +1,9 @@
 <?php
 session_start();
+$tipo = $_GET['tipo'] ?? 'normal';
+$isAvulsa = ($tipo === 'avulsa');
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -154,14 +157,6 @@ session_start();
             opacity: 0.5;
         }
 
-        .cta-section {
-            text-align: center;
-            background: rgba(255, 0, 0, 0.1);
-            border: 2px solid #ff0000;
-            border-radius: 15px;
-            padding: 50px 30px;
-            margin-top: 50px;
-        }
 
         .cta-section h2 {
             font-size: 2rem;
@@ -248,6 +243,39 @@ session_start();
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
+
+        .codigo-resultado {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+
+        .codigo-resultado h2 {
+            color: #0f0;
+            margin-bottom: 10px;
+        }
+
+        .codigo-resultado .codigo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0f0;
+            font-family: monospace;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .codigo-resultado p {
+            color: #fff;
+            margin: 10px 0;
+        }
+
+
     </style>
 </head>
 <body>
@@ -271,106 +299,157 @@ session_start();
         </ul>
     </header>
 
-    <section class="spinning-section">
-        <div class="spinning-container">
-            <div class="spinning-header">
-                <h1>AERÓBICOS</h1>
-                <p>Queime calorias e melhore sua resistência com nossas aulas aeróbicas.</p>
-            </div>
 
-            <div id="aulasContainer" class="spinning-grid">
-                <div class="loading">Carregando aulas...</div>
-            </div>
-
-            <div class="cta-section">
-                <h2>Quer fazer uma aula teste grátis?</h2>
-                <p>Escolha um horário e dia disponível para sua primeira aula de aeróbicos</p>
-                <button class="btn-agendar-teste" onclick="window.location.href='agendar-teste.html'">AGENDAR AULA TESTE GRÁTIS</button>
-            </div>
+<section class="spinning-section">
+    <div class="spinning-container">
+        <div class="spinning-header">
+            <h1><?= $isAvulsa ? 'Aula Avulsa - Aeróbicos' : 'AERÓBICOS' ?></h1>
+            <p>Queime calorias e melhore sua resistência com nossas aulas aeróbicas.</p>
         </div>
-    </section>
+
+        <div id="aulasContainer" class="spinning-grid">
+            <div class="loading">Carregando aulas...</div>
+        </div>
+
+        <?php if ($isAvulsa): ?>
+
+            <div class="codigo-resultado" id="codigoResultado">
+                <h2>✓ Agendamento Confirmado!</h2>
+                <p>Seu código de agendamento:</p>
+                <div class="codigo" id="codigoTexto">SPIN-XXXXX</div>
+                <p>Guarde este código! Você precisará dele na academia.</p>
+                <button class="btn-copiar" onclick="copiarCodigo()">COPIAR CÓDIGO</button>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Você receberá um email com os detalhes do agendamento.</p>
+                <a href="index.php" class="btn-voltar">← Voltar ao início</a>
+            </div>
+
+        <?php else: ?>
+
+            <!-- SE REMOVER O SITE NAO FUNCINA -->
+
+        <?php endif; ?>
+    </div>
+</section>
+
+
 
     <button class="btn-sair" onclick="window.location.href='index.php'">
     SAIR
 </button>
 
-    <script src="script.js" defer></script>
-    <script>
-        async function carregarAulas() {
-            const container = document.getElementById('aulasContainer');
+<script src="script.js" defer></script>
+<script>
+    const isAvulsa = new URLSearchParams(window.location.search).get('tipo') === 'avulsa';
 
-            try {
-                const response = await fetch('api/get_aulas.php?modalidade=funcional');
-                const data = await response.json();
+    async function carregarAulas() {
+        const container = document.getElementById('aulasContainer');
 
-                if (data.sucesso && data.dados.length > 0) {
-                    let html = '';
-                    data.dados.forEach(aula => {
-                        const nivelClass = 'nivel-' + aula.nivel.toLowerCase().replace('á', 'a');
-                        const vagasDisponiveis = aula.vagas_disponiveis > 0;
+        try {
+            const response = await fetch('api/get_aulas.php?modalidade=funcional');
+            const data = await response.json();
 
-                        html += `
-                            <div class="aula-card">
-                                <h3>${aula.nome}</h3>
-                                <div class="aula-info">
-                                    <p><strong>Instrutor:</strong> ${aula.instrutor}</p>
-                                    <p><strong>Horário:</strong> ${aula.horario}</p>
-                                    <p><strong>Descrição:</strong> ${aula.descricao}</p>
-                                    
-                                    <span class="nivel-badge ${nivelClass}">${aula.nivel}</span>
-                                    
-                                    <div class="vagas-info">
-                                        <p>Vagas disponíveis:</p>
-                                        <p class="vagas-numero">${aula.vagas_disponiveis}/${aula.capacidade}</p>
-                                    </div>
+            if (data.sucesso && data.dados.length > 0) {
+                let html = '';
+
+                data.dados.forEach(aula => {
+                    const nivelClass = 'nivel-' + aula.nivel.toLowerCase().replace('á', 'a');
+                    const vagasDisponiveis = aula.vagas_disponiveis > 0;
+
+                    html += `
+                        <div class="aula-card">
+                            <h3>${aula.nome}</h3>
+                            <div class="aula-info">
+                                <p><strong>Instrutor:</strong> ${aula.instrutor}</p>
+                                <p><strong>Horário:</strong> ${aula.horario}</p>
+                                <p><strong>Descrição:</strong> ${aula.descricao}</p>
+
+                                <span class="nivel-badge ${nivelClass}">${aula.nivel}</span>
+
+                                <div class="vagas-info">
+                                    <p>Vagas disponíveis:</p>
+                                    <p class="vagas-numero">${aula.vagas_disponiveis}/${aula.capacidade}</p>
                                 </div>
-                                
-                                ${vagasDisponiveis ? `
-                                    <button class="btn-inscrever" onclick="inscreverAula(${aula.id}, '${aula.nome}')">INSCREVER-SE</button>
-                                ` : `
-                                    <button class="btn-inscrever" disabled>AULA CHEIA</button>
-                                `}
                             </div>
-                        `;
-                    });
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = '<div class="erro">Nenhuma aula disponível no momento</div>';
-                }
-            } catch (erro) {
-                container.innerHTML = '<div class="erro">Erro ao carregar aulas. Tente novamente.</div>';
-                console.error(erro);
-            }
-        }
 
-        async function inscreverAula(aulaId, nomAula) {
-            const confirmacao = confirm(`Deseja se inscrever em "${nomAula}"?`);
-            if (!confirmacao) return;
-
-            try {
-                const formData = new FormData();
-                formData.append('aula_id', aulaId);
-
-                const response = await fetch('api/inscrever.php', {
-                    method: 'POST',
-                    body: formData
+                            ${vagasDisponiveis ? `
+                                <button class="btn-inscrever"
+                                    onclick="${isAvulsa
+                                        ? `agendarAvulsa(${aula.id}, '${aula.nome}')`
+                                        : `inscreverAula(${aula.id}, '${aula.nome}')`}">
+                                    ${isAvulsa ? 'AGENDAR AULA AVULSA' : 'INSCREVER-SE'}
+                                </button>
+                            ` : `
+                                <button class="btn-inscrever" disabled>AULA CHEIA</button>
+                            `}
+                        </div>
+                    `;
                 });
 
-                const data = await response.json();
-
-                if (data.sucesso) {
-                    alert('Inscrição realizada com sucesso! Acesse seu dashboard para gerenciar suas aulas.');
-                    carregarAulas();
-                } else {
-                    alert(data.mensagem || 'Erro ao inscrever');
-                }
-            } catch (erro) {
-                alert('Erro ao inscrever. Tente novamente.');
-                console.error(erro);
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="erro">Nenhuma aula disponível no momento</div>';
             }
+        } catch (erro) {
+            container.innerHTML = '<div class="erro">Erro ao carregar aulas.</div>';
+            console.error(erro);
         }
+    }
 
-        carregarAulas();
-    </script>
+    async function agendarAvulsa(aulaId, nomeAula) {
+        if (!confirm(`Confirmar aula avulsa em "${nomeAula}"?`)) return;
+
+        try {
+            const formData = new FormData();
+            formData.append('aula_id', aulaId);
+
+            const response = await fetch('api/agendar_teste.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.sucesso) {
+                document.getElementById('codigoTexto').innerText = data.dados.codigo_unico;
+                document.getElementById('codigoResultado').style.display = 'block';
+                document.getElementById('aulasContainer').style.display = 'none';
+            } else {
+                alert(data.mensagem || 'Erro ao agendar aula avulsa');
+            }
+        } catch (erro) {
+            alert('Erro ao agendar aula avulsa');
+            console.error(erro);
+        }
+    }
+
+    async function inscreverAula(aulaId, nomeAula) {
+        if (!confirm(`Deseja se inscrever em "${nomeAula}"?`)) return;
+
+        try {
+            const formData = new FormData();
+            formData.append('aula_id', aulaId);
+
+            const response = await fetch('api/inscrever.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.sucesso) {
+                alert('Inscrição realizada com sucesso!');
+                carregarAulas();
+            } else {
+                alert(data.mensagem || 'Erro ao inscrever');
+            }
+        } catch (erro) {
+            alert('Erro ao inscrever');
+            console.error(erro);
+        }
+    }
+
+    carregarAulas();
+</script>
+
 </body>
 </html>

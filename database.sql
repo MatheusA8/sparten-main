@@ -64,6 +64,7 @@ INSERT INTO aulas_spinning (nome, instrutor, horario, nivel, capacidade, descric
 
 
 
+
 USE sparten_main;
 
 -- Adicionar coluna de modalidade na tabela de aulas para unificar
@@ -81,3 +82,11 @@ INSERT INTO aulas (modalidade, nome, instrutor, horario, nivel, capacidade, desc
 ('funcional', 'Sparten WOD', 'Marlon', '07:00 - 08:00', 'Avançado', 15, 'Treino do dia focado em força funcional e condicionamento extremo'),
 ('funcional', 'Core & Stability', 'Eduardo', '10:00 - 11:00', 'Iniciante', 20, 'Foco no fortalecimento do core e equilíbrio corporal'),
 ('funcional', 'Functional Circuit', 'Lucas', '18:30 - 19:30', 'Intermediário', 18, 'Circuito dinâmico trabalhando todos os grupos musculares');
+
+
+
+
+
+ALTER TABLE agendamentos_teste
+ADD COLUMN aula_id INT AFTER usuario_id,
+ADD FOREIGN KEY (aula_id) REFERENCES aulas(id) ON DELETE CASCADE;

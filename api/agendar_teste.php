@@ -1,6 +1,6 @@
 <?php
 // =====================================================
-// AGENDAMENTO DE AULA TESTE
+// AGENDAMENTO DE AULA AVULSA
 // =====================================================
 
 require_once 'config.php';
@@ -12,82 +12,89 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     resposta_json(false, 'Método não permitido');
 }
 
-// Receber dados
-$nome = isset($_POST['nome']) ? sanitizar($_POST['nome']) : '';
-$email = isset($_POST['email']) ? sanitizar($_POST['email']) : '';
-$telefone = isset($_POST['telefone']) ? sanitizar($_POST['telefone']) : '';
-$data_agendamento = isset($_POST['data']) ? sanitizar($_POST['data']) : '';
-$horario = isset($_POST['horario']) ? sanitizar($_POST['horario']) : '';
-$nivel = isset($_POST['nivel']) ? sanitizar($_POST['nivel']) : '';
+// Iniciar sessão e validar login
+iniciar_sessao_segura();
 
-// Validações
-if (empty($nome) || strlen($nome) < 3) {
-    resposta_json(false, 'Nome deve ter pelo menos 3 caracteres');
+if (!isset($_SESSION['usuario_id'])) {
+    resposta_json(false, 'Usuário não autenticado');
 }
 
-if (empty($email) || !validar_email($email)) {
-    resposta_json(false, 'Email inválido');
+$usuario_id = $_SESSION['usuario_id'];
+
+// Receber aula
+$aula_id = isset($_POST['aula_id']) ? (int) $_POST['aula_id'] : 0;
+
+if ($aula_id <= 0) {
+    resposta_json(false, 'Aula inválida');
 }
 
-if (empty($telefone) || !validar_telefone($telefone)) {
-    resposta_json(false, 'Telefone inválido (mínimo 10 dígitos)');
+// Buscar aula
+$stmt = $conexao->prepare("
+    SELECT id, nome, horario, capacidade, ativo
+    FROM aulas
+    WHERE id = ? AND ativo = 'sim'
+");
+$stmt->bind_param("i", $aula_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    resposta_json(false, 'Aula não encontrada ou inativa');
 }
 
-if (empty($data_agendamento)) {
-    resposta_json(false, 'Data obrigatória');
-}
+$aula = $result->fetch_assoc();
+$stmt->close();
 
-// Validar data (não pode ser no passado)
-$data_agendamento_obj = DateTime::createFromFormat('Y-m-d', $data_agendamento);
-if (!$data_agendamento_obj || $data_agendamento_obj->format('Y-m-d') !== $data_agendamento) {
-    resposta_json(false, 'Data inválida');
-}
+// Contar inscritos fixos
+$stmt = $conexao->prepare("
+    SELECT COUNT(*) AS total
+    FROM inscricoes
+    WHERE aula_id = ? AND status = 'confirmado'
+");
+$stmt->bind_param("i", $aula_id);
+$stmt->execute();
+$fixos = $stmt->get_result()->fetch_assoc()['total'];
+$stmt->close();
 
-$hoje = new DateTime();
-if ($data_agendamento_obj < $hoje) {
-    resposta_json(false, 'Data não pode ser no passado');
-}
+// Contar avulsos
+$stmt = $conexao->prepare("
+    SELECT COUNT(*) AS total
+    FROM agendamentos_teste
+    WHERE aula_id = ? AND status = 'confirmado'
+");
+$stmt->bind_param("i", $aula_id);
+$stmt->execute();
+$avulsos = $stmt->get_result()->fetch_assoc()['total'];
+$stmt->close();
 
-if (empty($horario)) {
-    resposta_json(false, 'Horário obrigatório');
-}
-
-if (empty($nivel) || !in_array($nivel, ['Iniciante', 'Intermediário', 'Avançado'])) {
-    resposta_json(false, 'Nível inválido');
+// Validar vagas
+if (($fixos + $avulsos) >= $aula['capacidade']) {
+    resposta_json(false, 'Essa aula já está lotada');
 }
 
 // Gerar código único
 $codigo_unico = gerar_codigo_unico_valido($conexao);
 
-// Verificar se usuário está logado
-$usuario_id = null;
-iniciar_sessao_segura();
-if (isset($_SESSION['usuario_id'])) {
-    $usuario_id = $_SESSION['usuario_id'];
-}
+// Inserir agendamento avulso
+$stmt = $conexao->prepare("
+    INSERT INTO agendamentos_teste (codigo_unico, usuario_id, aula_id)
+    VALUES (?, ?, ?)
+");
 
-// Inserir agendamento
-$stmt = $conexao->prepare("INSERT INTO agendamentos_teste (codigo_unico, usuario_id, nome, email, telefone, data_agendamento, horario, nivel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssisssss", $codigo_unico, $usuario_id, $nome, $email, $telefone, $data_agendamento, $horario, $nivel);
+$stmt->bind_param("sii", $codigo_unico, $usuario_id, $aula_id);
 
 if ($stmt->execute()) {
-    $agendamento_id = $stmt->insert_id;
-    
-    resposta_json(true, 'Agendamento realizado com sucesso!', [
-        'agendamento_id' => $agendamento_id,
+
+    resposta_json(true, 'Aula avulsa agendada com sucesso!', [
         'codigo_unico' => $codigo_unico,
-        'nome' => $nome,
-        'email' => $email,
-        'data' => $data_agendamento,
-        'horario' => $horario,
-        'nivel' => $nivel,
-        'mensagem' => 'Seu código de agendamento é: ' . $codigo_unico . '. Guarde-o bem!'
+        'aula' => $aula['nome'],
+        'horario' => $aula['horario'],
+        'mensagem' => 'Apresente este código na portaria da academia.'
     ]);
+
 } else {
-    resposta_json(false, 'Erro ao agendar: ' . $conexao->error);
+    resposta_json(false, 'Erro ao agendar aula avulsa');
 }
 
 $stmt->close();
 $conexao->close();
-
-?>
