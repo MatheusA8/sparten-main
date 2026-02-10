@@ -24,6 +24,8 @@ body {
     pointer-events: none;
     z-index: -1; 
 }
+
+
 /* header fixo */
 header {
     position: fixed;
@@ -90,6 +92,28 @@ main p {
     opacity: 0.8;
     font-style: italic;
 }
+
+/* Estilo específico para o botão de Deslogar */
+header ul li a.logout-btn {
+    border: 2px solid #ff0000; /* Borda vermelha */
+    padding: 5px 15px;         /* Espaçamento interno para parecer botão */
+    border-radius: 5px;        /* Cantos levemente arredondados */
+    color: #ff0000;            /* Texto vermelho por padrão */
+    transition: all 0.3s ease; /* Transição suave para todas as propriedades */
+}
+
+/* Efeito Hover exclusivo para o Deslogar */
+header ul li a.logout-btn:hover {
+    background-color: #ff0000; /* Fundo fica vermelho */
+    color: #fff !important;    /* Texto fica branco (com force para garantir) */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Um brilho suave ao redor */
+}
+
+/* Ajuste para o Dashboard (opcional, para não brigarem visualmente) */
+.dashboard-btn {
+    color: #e63946; 
+}
+
 @keyframes fadeIn {
     0% { opacity: 0; transform: translateY(-30px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -125,6 +149,11 @@ main p {
         display: block;
     }
 }
+
+
+
+
+/* SEÇÃO SOBRE */
 .sobre {
     padding: 80px 20px;
     background-color: #111;
@@ -133,52 +162,43 @@ main p {
     position: relative;
     overflow: hidden;
 }
+
 .sobre h2 {
     font-size: clamp(28px, 5vw, 50px);
     margin-bottom: 40px;
     color: #ff0000;
 }
+
 .sobre-content {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-    flex-wrap: wrap;
-}
-.sobre-text {
-    flex: 1;
-    min-width: 250px;
-}
-.text-bg {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 10px;
-    animation: fadeIn 1s ease forwards;
-}
-.text-bg p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    opacity: 0.9;
+    flex-direction: column; /* Coloca imagem em cima e texto embaixo */
+    align-items: center;    /* Centraliza os dois horizontalmente */
+    gap: 40px;              /* Espaço entre a imagem e o texto */
+    max-width: 1200px;      /* Limita a largura máxima da seção */
+    margin: 0 auto;         /* Centraliza o container na tela */
 }
 
-
-
-
-
-/* SOBRE */
+/* CONTAINER DA IMAGEM */
 .sobre-imagem {
-    flex: 1;
-    min-width: 250px;
+    width: 100%;
+    max-width: 500px;      /* Controla o tamanho da foto no Desktop */
     position: relative;
     overflow: hidden;
-    margin-top: 50px; /* distancia da seção de cima */
     animation: fadeIn 1s ease forwards;
-    box-shadow: 0 0 30px rgba(255,0,0,0.3); 
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); 
     border-radius: 15px; 
     border: 3px solid #ff0000;
-    background: rgba(255,0,0,0.1);
+    background: rgba(255, 0, 0, 0.1);
 }
+
+.sobre-imagem img {
+    width: 100%;           /* Ocupa toda a largura do container (500px) */
+    height: auto;          /* Mantém a proporção correta, sem esticar */
+    display: block;
+    object-fit: cover;
+    object-position: top;
+}
+
 #canvas-bg {
     position: absolute;
     top: 0;
@@ -187,31 +207,59 @@ main p {
     height: 100%;
     z-index: 0;
 }
-.sobre-img {
+
+/* TEXTO */
+.sobre-text {
     width: 100%;
-    height: 100%; /* preenche todo o container */
-    display: block;
-    object-fit: cover; /* mantém proporção e cobre todo o container */
-    object-position: top; /* garante que a parte de cima apareça */
+    max-width: 800px;      /* Evita que o texto fique largo demais */
 }
+
+.text-bg {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 10px;
+    animation: fadeIn 1s ease forwards;
+}
+
+.text-bg p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* ANIMAÇÕES */
 @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-15px); }
     100% { transform: translateY(0px); }
 }
+
 @keyframes fadeIn {
     0% { opacity: 0; transform: translateY(-20px); }
     100% { opacity: 1; transform: translateY(0); }
 }
+
+/* RESPONSIVIDADE (CELULAR) */
 @media (max-width: 768px) {
+    .sobre {
+        padding: 50px 15px;
+    }
+
+    .sobre-imagem {
+        max-width: 90%;    /* No celular a imagem ganha mais destaque */
+    }
+
+    /* Ajuste para outra seção que estava no seu código original */
     .planos-content {
-        flex-direction: column; /* uma coluna */
-        align-items: center;    /* centraliza cada card */
-        gap: 20px;              /* mantém o espaçamento */
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
     }
 
     .plano {
-        max-width: 90%;         /* ocupa quase toda a tela no celular */
+        max-width: 90%;
     }
 }
 
@@ -696,7 +744,7 @@ canvas#canvas-bg {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1000px; /* ajuste do tamanho da logo */
+    width: 400px; /* ajuste do tamanho da logo */
     opacity: 0.5; /* suave, fundo */
     z-index: -1; /* entre o canvas e o conteúdo */
 }
@@ -920,5 +968,117 @@ html {
 
     .servicos-grid {
         gap: 20px;
+    }
+}
+
+
+
+
+
+/* SERVIÇOS */
+.servicos {
+    padding: 100px 20px;
+    background-color: #1c1c1c;
+    color: #fff;
+    text-align: center;
+}
+
+.servicos-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espaço entre a grid e o banner de agendamento */
+}
+
+.servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    width: 100%;
+}
+
+.servico-card {
+    background: rgba(255, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 40px 30px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.servico-card:hover {
+    transform: translateY(-5px);
+    border-color: #ff0000;
+    background: rgba(255, 0, 0, 0.1);
+}
+
+/* NOVO BANNER DE AGENDAMENTO */
+.agendamento-banner {
+    background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+    border: 2px solid #ff0000;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    gap: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.agendamento-info h3 {
+    color: #ff0000;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.agendamento-info p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* BOTÕES */
+.servico-btn {
+    background: #ff0000;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.servico-btn:hover {
+    background: #fff;
+    color: #ff0000;
+}
+
+.btn-teste {
+    background: #0f0;
+    color: #000;
+    min-width: 200px;
+    text-align: center;
+}
+
+.btn-teste:hover {
+    background: #fff;
+    color: rgb(255, 255, 255);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+/* Responsividade para o Banner */
+@media (max-width: 768px) {
+    .agendamento-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .btn-teste {
+        width: 100%;
     }
 }

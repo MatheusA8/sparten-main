@@ -289,17 +289,20 @@ $isAvulsa = ($tipo === 'avulsa');
     <header>    
         <button class="menu-btn">•••</button>
         <ul class="menu">
-            <li><a href="index.php">INÍCIO</a></li>
-            <li><a href="index.php#sobre">SOBRE</a></li>
-            <li><a href="index.php#servicos">SERVIÇOS</a></li>
-            <li><a href="index.php#planos">PLANOS E VALORES</a></li>
-            <li><a href="index.php#estrutura">ESTRUTURA</a></li>
-            <li><a href="index.php#equipe">EQUIPE</a></li>
-            <li><a href="index.php#clientes">CLIENTES</a></li>
-            <li><a href="index.php#localizacao">LOCALIZAÇÃO</a></li>
-            <li><a href="index.php#horarios">HORÁRIOS</a></li>
-            <li><a href="index.php#contatos">CONTATOS</a></li>
+            <li><a href="#inicio">INÍCIO</a></li>
+            <li><a href="#sobre">SOBRE</a></li>
+            <li><a href="#planos">PLANOS E VALORES</a></li>
+            <li><a href="#estrutura">ESTRUTURA</a></li>
+            <li><a href="#servicos">SERVIÇOS</a></li>
+            <li><a href="#equipe">EQUIPE</a></li>
+            <li><a href="#clientes">CLIENTES</a></li>
+            <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
+            <li><a href="#horarios">HORÁRIOS</a></li>
+            <li><a href="#contatos">CONTATOS</a></li>
+            <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
+            <li><a href="api/logout.php" class="logout-btn" onclick="return confirm('Tem certeza que deseja Deslogar?')">Deslogar</a></li>
         </ul>
+        
     </header>
 
     <section class="spinning-section">

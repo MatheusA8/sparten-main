@@ -29,7 +29,7 @@ session_start();
             <li><a href="#horarios">HORÁRIOS</a></li>
             <li><a href="#contatos">CONTATOS</a></li>
             <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
-            <button onclick="window.location.href='api/logout.php'">Deslogar</button>
+            <li><a href="api/logout.php" class="logout-btn" onclick="return confirm('Tem certeza que deseja Deslogar?')">Deslogar</a></li>
         </ul>
         
     </header>
@@ -42,24 +42,24 @@ session_start();
 <section id="sobre" class="sobre">
     <h2>Sobre a Sparten</h2>
     <div class="sobre-content">
-        <!-- Texto com fundo blur -->
+        
+        <div class="sobre-imagem">
+            <canvas id="canvas-bg"></canvas>
+            <img src="../sparten-main/images/FotoEquipe.jpeg" alt="Academia Sparten" class="sobre-img">
+        </div>
+
         <div class="sobre-text">
             <div class="text-bg">
                 <p>Na Academia Sparten, acreditamos que treinar é mais que um hábito: é um estilo de vida. Nossa missão é transformar seus objetivos em conquistas reais, com estrutura completa, equipe qualificada e ambiente motivador.</p>
             </div>
         </div>
 
-        <!-- Imagem com fundo interativo -->
-        <div class="sobre-imagem">
-            <canvas id="canvas-bg"></canvas>
-            <img src="../sparten-main/images/EquipeSobre.jpeg" alt="Academia Sparten" class="sobre-img">
-        </div>
     </div>
 </section>
 
 <!-- Próxima sessão imendada -->
 <section id="planos" class="planos">
-    <h2>Planos e Valores</h2>
+    <h2>Planos e Valores da Musculação</h2>
     <div class="planos-content">
         <div class="plano">
             <h3>Mensal</h3>
@@ -109,58 +109,50 @@ session_start();
         <!-- 3º Andar -->
         <div class="estrutura-card novidade">
             <h3>3º Andar</h3>
-            <p>Novidades em breve! Preparado para surpreender.</p>
+            <p>Spinning, Treino Funcional e Step Dance para superar seus limites.</p>
             <img src="../sparten-main/images/3d-question-mark-icon-or-ask-faq-answer-solution-isolated-on-transparent-background-file-png.webp" alt="3º Andar">
-
-
-
-            <a href="../sparten-main/dashboard.php"><button>dashboard</button></a>
-
-
 
         </div>
     </div>
 </section>
 
+<div class="equipe-para-clientes"></div>
 
 <section id="servicos" class="servicos">
     <h2>Nossos Serviços</h2>
     <p class="servicos-subtitulo">Escolha a modalidade que mais combina com seus objetivos.</p>
-    <div class="servicos-grid">
-        <!-- Musculação -->
-        <div class="servico-card">
-            <h3>Musculação</h3>
-            <p>Treinos personalizados com equipamentos de última geração para ganho de massa, força e definição muscular.</p>
-            <a href="#planos" class="servico-btn">Ver Planos</a>
-        </div>
-
-        <!-- Spinning -->
-        <div class="servico-card">
-            <h3>Spinning</h3>
-            <p>Aulas dinâmicas de ciclismo indoor com alta queima calórica e melhora do condicionamento cardiovascular.</p>
-            <div class="spinning-box-btns">
+    
+    <div class="servicos-container">
+        <div class="servicos-grid">
+            <div class="servico-card">
+                <h3>Spinning</h3>
+                <p>Aulas dinâmicas de ciclismo indoor com alta queima calórica e melhora do condicionamento cardiovascular.</p>
                 <a href="spinning.php" class="servico-btn">Ver Aulas</a>
-                <a href="agendar-teste.html" class="servico-btn btn-teste">Agendar Teste</a>
+            </div>
+
+            <div class="servico-card">
+                <h3>Aeróbicos</h3>
+                <p>Atividades focadas na queima de gordura e resistência física, incluindo esteiras, elípticos e bikes.</p>
+                <a href="../sparten-main/aerobicos.php" class="servico-btn">Ver Planos</a>
+            </div>
+
+            <div class="servico-card">
+                <h3>Treino Funcional</h3>
+                <p>Exercícios que trabalham o corpo de forma integrada, melhorando mobilidade, equilíbrio e força funcional.</p>
+                <a href="../sparten-main/funcional.php" class="servico-btn">Ver Planos</a>
             </div>
         </div>
 
-        <!-- Aeróbicos -->
-        <div class="servico-card">
-            <h3>Aeróbicos</h3>
-            <p>Atividades focadas na queima de gordura e resistência física, incluindo esteiras, elípticos e bikes.</p>
-            <a href="../sparten-main/aerobicos.php" class="servico-btn">Ver Planos</a>
-        </div>
-
-        <!-- Treino Funcional -->
-        <div class="servico-card">
-            <h3>Treino Funcional</h3>
-            <p>Exercícios que trabalham o corpo de forma integrada, melhorando mobilidade, equilíbrio e força funcional.</p>
-            <a href="../sparten-main/funcional.php" class="servico-btn">Ver Planos</a>
+        <div class="agendamento-banner">
+            <div class="agendamento-info">
+                <h3>Ainda na dúvida de qual escolher?</h3>
+                <p>Agende uma aula experimental e conheça nossa estrutura de perto!</p>
+            </div>
+            <a href="agendar-teste.html" class="servico-btn btn-teste">Agendar Aula Teste</a>
         </div>
     </div>
 </section>
-
-
+<div class="transicao planos-para-estrutura"></div>
 <section id="equipe" class="equipe">
     <h2>Nossa Equipe</h2>
     <div class="equipe-content">
@@ -195,8 +187,8 @@ session_start();
         <div class="membro">
             <div class="membro-header">Mirela</div>
             <div class="membro-body">
-                <img src="../sparten-main/images/Mirela2.jpeg" alt="Mirela">
-                <p>Mirela faz tudo com empenho e coração, motivando e organizando as atividades da academia, ajudando todos a alcançarem seus objetivos.</p>
+                <img src="../sparten-main/images/Valeria.jpeg" alt="Mirela">
+                <p>Váleria faz tudo com empenho e coração, motivando e organizando as atividades da academia, ajudando todos a alcançarem seus objetivos.</p>
             </div>
         </div>
         <div class="membro">
@@ -264,7 +256,7 @@ session_start();
             <p>✉️ E-mail: contato@sparten.com</p>
             <p>📍 Endereço: Rua Expedicionário Stanislau Mikuska - Irati</p>
         </div>
-        <p class="direitos">&copy; 2024 Academia Sparten. Todos os direitos reservados.</p>
+        <p class="direitos">&copy; 2026 Academia Sparten. Todos os direitos reservados.</p>
     </div>
 </section>
 
