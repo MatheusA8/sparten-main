@@ -1,6 +1,18 @@
 <?php
 require_once __DIR__ . '/api/auth.php';
 verificar_login();
+
+require_once 'api/auth.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: dashboard.php");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>

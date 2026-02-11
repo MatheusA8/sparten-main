@@ -4,6 +4,12 @@ require_once 'api/auth.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// 🔥 Verifica se está logado
+if (isset($_SESSION['usuario_id'])) {
+    header("Location: dashboard.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

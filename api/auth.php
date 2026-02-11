@@ -6,10 +6,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function verificar_login() {
     if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-        header("Location: login.html");
+        header("Location: index.php");
         exit;
     }
 }
+
 
 function verificar_admin() {
     verificar_login();
