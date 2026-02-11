@@ -145,7 +145,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
 
             <div class="servico-card">
-                <h3>Aeróbicos</h3>
+                <h3>Step Dance</h3>
                 <p>Atividades focadas na queima de gordura e resistência física, incluindo esteiras, elípticos e bikes.</p>
                 <a href="../sparten-main/aerobicos.php" class="servico-btn">Ver Planos</a>
             </div>

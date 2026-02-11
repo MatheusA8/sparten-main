@@ -372,7 +372,7 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
                         <select id="modalidade" required>
                             <option value="">Selecione</option>
                             <option value="spinning">Spinning</option>
-                            <option value="aerobicos">Aeróbicos</option>
+                            <option value="aerobicos">Step Dance</option>
                             <option value="funcional">Funcional</option>
                         </select>
                     </div>

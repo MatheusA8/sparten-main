@@ -10,7 +10,7 @@ $isAvulsa = ($tipo === 'avulsa');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style/style.css">
-    <title>Aeróbicos - Sparten</title>
+    <title>STEP DANCE - Sparten</title>
     <style>
         .spinning-section {
             min-height: 100vh;
@@ -296,17 +296,28 @@ $isAvulsa = ($tipo === 'avulsa');
             <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
             <li><a href="#horarios">HORÁRIOS</a></li>
             <li><a href="#contatos">CONTATOS</a></li>
-            <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
-            <li><a href="api/logout.php" class="logout-btn" onclick="return confirm('Tem certeza que deseja Deslogar?')">Deslogar</a></li>
+    
+            <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+                <li><a href="admin.php" class="dashboard-btn">PAINEL ADMIN</a></li>
+            <?php else: ?>
+                <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
+            <?php endif; ?>
+            
+            <li>
+                <a href="api/logout.php" 
+                   class="logout-btn" 
+                   onclick="return confirm('Tem certeza que deseja Deslogar?')">
+                   Deslogar
+                </a>
+            </li>
         </ul>
-        
     </header>
 
 
 <section class="spinning-section">
     <div class="spinning-container">
         <div class="spinning-header">
-            <h1><?= $isAvulsa ? 'Aula Avulsa - Aeróbicos' : 'AERÓBICOS' ?></h1>
+            <h1><?= $isAvulsa ? 'Aula Avulsa - STEP DANCE' : 'STEP DANCE' ?></h1>
             <p>Queime calorias e melhore sua resistência com nossas aulas aeróbicas.</p>
         </div>
 
