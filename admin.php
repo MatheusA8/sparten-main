@@ -276,53 +276,58 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
         }
 
         @media (max-width: 768px) {
-            .admin-header {
-                flex-direction: column;
-                align-items: flex-start;
+            .admin-header h1 { font-size: 1.8rem; }
+
+            /* Esconde a tabela no mobile */
+            .tabela-wrapper { display: none; }
+
+            /* Estilização dos Cards */
+            .agendamentos-container-cards {
+                display: block;
             }
 
-            .tabela {
-                font-size: 0.9rem;
-            }
-
-            .tabela th,
-            .tabela td {
-                padding: 8px;
-            }
-
-            .btn-acao {
-                padding: 4px 8px;
-                font-size: 0.75rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-        
-            table {
-                display: none;
-            }
-        
             .agendamento-card {
-                background: #111;
-                border: 1px solid red;
+                background: rgba(255, 0, 0, 0.05);
+                border: 1px solid #ff0000;
                 border-radius: 12px;
                 padding: 15px;
                 margin-bottom: 15px;
                 color: white;
             }
-        
+
             .agendamento-card p {
-                margin: 5px 0;
+                margin: 8px 0;
                 font-size: 14px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 4px;
             }
-        
+
+            .agendamento-card p strong {
+                color: #ff0000;
+                text-transform: uppercase;
+                font-size: 12px;
+                display: block;
+            }
+
             .card-buttons {
-                margin-top: 10px;
+                margin-top: 15px;
                 display: flex;
-                gap: 10px;
+                gap: 8px;
                 flex-wrap: wrap;
             }
-        
+
+            .card-buttons .btn-acao {
+                flex: 1;
+                padding: 10px;
+                text-align: center;
+            }
+        }
+
+        /* No desktop, esconde os cards */
+        @media (min-width: 769px) {
+            .agendamentos-container-cards {
+                display: none;
+            }
         }
 
         
@@ -564,54 +569,86 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             }
         }
 
-        async function carregarAgendamentos(filtro = 'confirmado') {
-            const container = document.getElementById('agendamentosTabela');
-            const loading = document.getElementById('loadingAgendamentos');
+async function carregarAgendamentos(filtro = 'confirmado') {
+    const container = document.getElementById('agendamentosTabela');
+    const loading = document.getElementById('loadingAgendamentos');
 
-            try {
-                const response = await fetch(`api/admin_agendamentos.php?filtro=${filtro}`);
-                const data = await response.json();
-                console.log(data);
+    try {
+        const response = await fetch(`api/admin_agendamentos.php?filtro=${filtro}`);
+        const data = await response.json();
 
+        loading.style.display = 'none';
 
-                loading.style.display = 'none';
+        if (data.sucesso && data.dados.length > 0) {
+            // VERSÃO TABELA (Desktop)
+            let htmlTable = '<div class="tabela-wrapper"><table class="tabela"><thead><tr><th>Código</th><th>Cliente/Tel</th><th>Aula</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+            
+            // VERSÃO CARDS (Mobile)
+            let htmlCards = '<div class="agendamentos-container-cards">';
 
-                if (data.sucesso && data.dados.length > 0) {
-                    let html = '<table class="tabela"><thead><tr><th>Código</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Aula</th><th>Data</th><th>Horário</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
-                    data.dados.forEach(agendamento => {
-                        html += `
-                            <tr>
-                                <td><strong>${agendamento.codigo_unico}</strong></td>
-                                    <td>${agendamento.nome}</td>
-                                    <td>${agendamento.email}</td>
-                                    <td>${agendamento.telefone}</td>
-                                    <td>${agendamento.nome_aula}</td>
-                                    <td>${agendamento.data_criacao}</td>
-                                    <td>${agendamento.horario}</td>
-                                    <td>${agendamento.status}</td>
-                                <td>
-                                    ${agendamento.status === 'confirmado' ? `
-                                        <button class="btn-acao verde" onclick="marcarRealizado(${agendamento.id})">Realizado</button>
-                                        <button class="btn-acao vermelho" onclick="cancelarAgendamento(${agendamento.id})">Cancelar</button>
-                                    ` : `
-                                        <button class="btn-acao vermelho" onclick="deletarAgendamento(${agendamento.id})">Deletar</button>
-                                    `}
-                                </td>
-                            </tr>
+            data.dados.forEach(agendamento => {
+                // Tabela Desktop
+                htmlTable += `
+                    <tr>
+                        <td><strong>${agendamento.codigo_unico}</strong></td>
+                        <td>${agendamento.nome}<br><small style="color: #bbb;">${agendamento.telefone}</small></td>
+                        <td>${agendamento.nome_aula}</td>
+                        <td>${agendamento.data_criacao}<br><span style="color: #ff0000; font-weight: bold;">${agendamento.horario}</span></td>
+                        <td>${agendamento.status}</td>
+                        <td>
+                            ${agendamento.status === 'confirmado' ? `
+                                <button class="btn-acao verde" onclick="marcarRealizado(${agendamento.id})">OK</button>
+                                <button class="btn-acao vermelho" onclick="cancelarAgendamento(${agendamento.id})">X</button>
+                            ` : `
+                                <button class="btn-acao vermelho" onclick="deletarAgendamento(${agendamento.id})">Excluir</button>
+                            `}
+                        </td>
+                    </tr>`;
 
-                        `;
-                    });
-                    html += '</tbody></table>';
-                    container.innerHTML = html;
-                } else {
-                    container.innerHTML = '<p style="color: #fff;">Nenhum agendamento encontrado</p>';
-                }
-            } catch (erro) {
-                loading.style.display = 'none';
-                container.innerHTML = '<p style="color: #ff3333;">Erro ao carregar agendamentos</p>';
-                console.error(erro);
-            }
+                // Cards Mobile
+                htmlCards += `
+                    <div class="agendamento-card">
+                        <p><strong>CÓDIGO</strong> ${agendamento.codigo_unico}</p>
+                        
+                        <p><strong>CLIENTE / TELEFONE</strong> ${agendamento.nome} | ${agendamento.telefone}</p>
+                        
+                        <p><strong>AULA</strong> ${agendamento.nome_aula}</p>
+                        
+                        <div style="margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;">
+                            <strong style="color: #ff0000; text-transform: uppercase; font-size: 12px; display: block;">DATA E HORÁRIO</strong>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                                <span style="font-size: 14px;">${agendamento.data_criacao}</span>
+                                <span style="background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px;">${agendamento.horario}</span>
+                            </div>
+                        </div>
+
+                        <p><strong>STATUS</strong> ${agendamento.status}</p>
+                        
+                        <div class="card-buttons">
+                            ${agendamento.status === 'confirmado' ? `
+                                <button class="btn-acao verde" onclick="marcarRealizado(${agendamento.id})">Confirmar Treino</button>
+                                <button class="btn-acao vermelho" onclick="cancelarAgendamento(${agendamento.id})">Cancelar</button>
+                            ` : `
+                                <button class="btn-acao vermelho" onclick="deletarAgendamento(${agendamento.id})">Remover do Histórico</button>
+                            `}
+                        </div>
+                    </div>`;
+            });
+
+            htmlTable += '</tbody></table></div>';
+            htmlCards += '</div>';
+
+            container.innerHTML = htmlTable + htmlCards;
+
+        } else {
+            container.innerHTML = '<p style="color: #fff; text-align: center;">Nenhum agendamento encontrado</p>';
         }
+    } catch (erro) {
+        loading.style.display = 'none';
+        container.innerHTML = '<p style="color: #ff3333;">Erro ao carregar agendamentos</p>';
+        console.error(erro);
+    }
+}
 
         async function marcarRealizado(agendamentoId) {
             try {
