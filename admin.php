@@ -330,6 +330,32 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             }
         }
 
+        .dias-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dias-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .dia-btn {
+            padding: 8px 14px;
+            border: 2px solid #ff0000;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .dias-container input[type="checkbox"]:checked + .dia-btn {
+            background: #ff0000;
+            color: white;
+        }
+
+
+
         
     </style>
 </head>
@@ -372,46 +398,82 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             <div id="aulas" class="tab-content ativo">
                 <div class="form-aula">
                     <h2 style="color: #ff0000; margin-top: 0;">Adicionar Nova Aula</h2>
-                    <div class="form-group">
-                        <label>Modalidade</label>
-                        <select id="modalidade" required>
-                            <option value="">Selecione</option>
-                            <option value="spinning">Spinning</option>
-                            <option value="aerobicos">Step Dance</option>
-                            <option value="funcional">Funcional</option>
-                        </select>
-                    </div>
+
                     <form id="formAula">
+
+                        <div class="form-group">
+                            <label>Modalidade</label>
+                            <select id="modalidade" name="modalidade" required>
+                                <option value="">Selecione</option>
+                                <option value="spinning">Spinning</option>
+                                <option value="aerobicos">Step Dance</option>
+                                <option value="funcional">Funcional</option>
+                            </select>
+                        </div>
+
                         <div class="form-group">
                             <label>Nome da Aula</label>
-                            <input type="text" id="nome" placeholder="Ex: Power Spin" required>
+                            <input type="text" id="nome" name="nome" placeholder="Ex: Power Spin" required>
                         </div>
+
                         <div class="form-group">
                             <label>Instrutor</label>
-                            <input type="text" id="instrutor" placeholder="Nome do instrutor" required>
+                            <input type="text" id="instrutor" name="instrutor" placeholder="Nome do instrutor" required>
                         </div>
+
+                        <div class="form-group">
+                            <label>Dias da Semana</label>
+                            <div class="dias-container">
+                                <input type="checkbox" id="seg" name="dias_semana[]" value="Segunda">
+                                <label for="seg" class="dia-btn">Seg</label>
+
+                                <input type="checkbox" id="ter" name="dias_semana[]" value="Terça">
+                                <label for="ter" class="dia-btn">Ter</label>
+
+                                <input type="checkbox" id="qua" name="dias_semana[]" value="Quarta">
+                                <label for="qua" class="dia-btn">Qua</label>
+
+                                <input type="checkbox" id="qui" name="dias_semana[]" value="Quinta">
+                                <label for="qui" class="dia-btn">Qui</label>
+
+                                <input type="checkbox" id="sex" name="dias_semana[]" value="Sexta">
+                                <label for="sex" class="dia-btn">Sex</label>
+
+                                <input type="checkbox" id="sab" name="dias_semana[]" value="Sábado">
+                                <label for="sab" class="dia-btn">Sáb</label>
+
+                                <input type="checkbox" id="dom" name="dias_semana[]" value="Domingo">
+                                <label for="dom" class="dia-btn">Dom</label>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>Horário</label>
-                            <input type="text" id="horario" placeholder="Ex: 06:00 - 07:00" required>
+                            <input type="text" id="horario" name="horario" placeholder="Ex: 06:00 - 07:00" required>
                         </div>
+
                         <div class="form-group">
                             <label>Nível</label>
-                            <select id="nivel" required>
+                            <select id="nivel" name="nivel" required>
                                 <option value="">Selecione</option>
                                 <option value="Iniciante">Iniciante</option>
                                 <option value="Intermediário">Intermediário</option>
                                 <option value="Avançado">Avançado</option>
                             </select>
                         </div>
+
                         <div class="form-group">
                             <label>Capacidade (máximo de alunos)</label>
-                            <input type="number" id="capacidade" min="1" placeholder="Ex: 20" required>
+                            <input type="number" id="capacidade" name="capacidade" min="1" placeholder="Ex: 20" required>
                         </div>
+
                         <div class="form-group">
                             <label>Descrição</label>
-                            <textarea id="descricao" placeholder="Descreva a aula..."></textarea>
+                            <textarea id="descricao" name="descricao" placeholder="Descreva a aula..."></textarea>
                         </div>
+
                         <button type="submit" class="btn-submit">ADICIONAR AULA</button>
+
                     </form>
                 </div>
 
@@ -442,24 +504,8 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
     formAula.addEventListener('submit', async (e) => {
         e.preventDefault();
     
-        const modalidade = document.getElementById('modalidade').value;
-        const nome = document.getElementById('nome').value;
-        const instrutor = document.getElementById('instrutor').value;
-        const horario = document.getElementById('horario').value;
-        const nivel = document.getElementById('nivel').value;
-        const capacidade = document.getElementById('capacidade').value;
-        const descricao = document.getElementById('descricao').value;
-    
         try {
-            const formData = new FormData();
-            formData.append('modalidade', modalidade);
-            formData.append('nome', nome);
-            formData.append('instrutor', instrutor);
-            formData.append('horario', horario);
-            formData.append('nivel', nivel);
-            formData.append('capacidade', capacidade);
-            formData.append('descricao', descricao);
-    
+            const formData = new FormData(formAula);
             const response = await fetch('api/admin_aulas.php?acao=adicionar', {
                 method: 'POST',
                 body: formData
@@ -593,7 +639,7 @@ async function carregarAgendamentos(filtro = 'confirmado') {
                         <td><strong>${agendamento.codigo_unico}</strong></td>
                         <td>${agendamento.nome}<br><small style="color: #bbb;">${agendamento.telefone}</small></td>
                         <td>${agendamento.nome_aula}</td>
-                        <td>${agendamento.data_criacao}<br><span style="color: #ff0000; font-weight: bold;">${agendamento.horario}</span></td>
+                        <td>${agendamento.dias_semana}<br><span style="color: #ff0000; font-weight: bold;">${agendamento.horario}</span></td>
                         <td>${agendamento.status}</td>
                         <td>
                             ${agendamento.status === 'confirmado' ? `
@@ -617,7 +663,7 @@ async function carregarAgendamentos(filtro = 'confirmado') {
                         <div style="margin-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 4px;">
                             <strong style="color: #ff0000; text-transform: uppercase; font-size: 12px; display: block;">DATA E HORÁRIO</strong>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
-                                <span style="font-size: 14px;">${agendamento.data_criacao}</span>
+                                <span style="font-size: 14px;">${agendamento.dias_semana}</span>
                                 <span style="background: #ff0000; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 13px;">${agendamento.horario}</span>
                             </div>
                         </div>

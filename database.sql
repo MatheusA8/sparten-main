@@ -90,3 +90,9 @@ INSERT INTO aulas (modalidade, nome, instrutor, horario, nivel, capacidade, desc
 ('funcional', 'Sparten WOD', 'Marlon', '07:00 - 08:00', 'Avançado', 15, 'Treino funcional intenso'),
 ('funcional', 'Core & Stability', 'Eduardo', '10:00 - 11:00', 'Iniciante', 20, 'Fortalecimento do core'),
 ('funcional', 'Functional Circuit', 'Lucas', '18:30 - 19:30', 'Intermediário', 18, 'Circuito completo');
+
+
+
+
+
+ALTER TABLE aulas CHANGE dia_semana dias_semana VARCHAR(100) NOT NULL;

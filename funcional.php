@@ -380,7 +380,10 @@ $isAvulsa = ($tipo === 'avulsa');
                             <h3>${aula.nome}</h3>
                             <div class="aula-info">
                                 <p><strong>Instrutor:</strong> ${aula.instrutor}</p>
-                                <p><strong>Horário:</strong> ${aula.horario}</p>
+                                <p>
+                                    <strong>Quando:</strong> 
+                                    ${aula.dias_semana.replaceAll(',', ' • ')} • ${aula.horario}
+                                </p>
                                 <p><strong>Descrição:</strong> ${aula.descricao}</p>
 
                                 <span class="nivel-badge ${nivelClass}">${aula.nivel}</span>
@@ -404,7 +407,6 @@ $isAvulsa = ($tipo === 'avulsa');
                         </div>
                     `;
                 });
-
                 container.innerHTML = html;
             } else {
                 container.innerHTML = '<div class="erro">Nenhuma aula disponível no momento</div>';

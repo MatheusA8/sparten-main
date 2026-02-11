@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // =====================================================
 // OBTER AGENDAMENTOS DO USUÁRIO
 // =====================================================
@@ -11,7 +14,21 @@ header('Content-Type: application/json');
 $usuario_id = verificar_login();
 
 // Buscar agendamentos do usuário
-$stmt = $conexao->prepare("SELECT id, codigo_unico, nome, email, telefone, data_agendamento, horario, nivel, status, data_criacao FROM agendamentos_teste WHERE usuario_id = ? ORDER BY data_agendamento DESC");
+$stmt = $conexao->prepare("
+    SELECT 
+        ag.id,
+        ag.codigo_unico,
+        ag.status,
+        ag.data_criacao,
+        a.nome AS nome_aula,
+        a.dias_semana,
+        a.horario,
+        a.nivel
+    FROM agendamentos_teste ag
+    LEFT JOIN aulas a ON ag.aula_id = a.id
+    WHERE ag.usuario_id = ?
+    ORDER BY ag.id DESC
+");
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
 $resultado = $stmt->get_result();

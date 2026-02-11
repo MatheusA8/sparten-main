@@ -26,7 +26,8 @@ if ($metodo === 'GET') {
             u.email,
             u.telefone,
             a.nome AS nome_aula,
-            a.horario
+            a.dias_semana AS dias_semana,
+            a.horario AS horario
         FROM agendamentos_teste ag
         LEFT JOIN usuarios u ON ag.usuario_id = u.id
         LEFT JOIN aulas a ON ag.aula_id = a.id

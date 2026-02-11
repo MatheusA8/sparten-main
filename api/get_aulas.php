@@ -16,7 +16,7 @@ if (!in_array($modalidade, ['spinning', 'aerobicos', 'funcional'])) {
 
 // Buscar aulas ativas da modalidade
 $stmt = $conexao->prepare("
-    SELECT id, nome, instrutor, horario, nivel, capacidade, descricao
+    SELECT id, nome, dias_semana, instrutor, horario, nivel, capacidade, descricao
     FROM aulas
     WHERE ativo = 'sim' AND modalidade = ?
     ORDER BY horario ASC

@@ -261,11 +261,11 @@ verificar_login();
 
         <div class="dashboard-content">
             <!-- Perfil -->
-            <div class="perfil-info" id="perfilInfo">
-                <h2>Bem-vindo!</h2>
-                <p id="nomeUsuario"></p>
-                <p id="emailUsuario"></p>
-            </div>
+        <div class="perfil-info" id="perfilInfo">
+            <h2 id="boasVindas"></h2>
+            <p id="emailUsuario"></p>
+        </div>
+
 
             <!-- Abas -->
             <div class="dashboard-tabs">
@@ -330,13 +330,23 @@ verificar_login();
         }
 
         async function carregarDados() {
-            // Aqui você carregaria os dados do usuário via PHP
-            // Por enquanto, vamos usar dados de exemplo
-            document.getElementById('nomeUsuario').textContent = 'Bem-vindo, Usuário!';
-            document.getElementById('emailUsuario').textContent = 'usuario@email.com';
-            
+            try {
+                const response = await fetch('api/get_usuario.php');
+                const data = await response.json();
+
+                console.log(data); // 👈 ADICIONA ISSO
+        
+                if (data.sucesso) {
+                    document.getElementById('boasVindas').textContent = `Bem-vindo, ${data.dados.nome}!`;
+                    document.getElementById('emailUsuario').textContent = data.dados.email;
+                }
+            } catch (erro) {
+                console.error('Erro ao carregar dados do usuário:', erro);
+            }
+        
             carregarAgendamentos();
         }
+
 
         async function carregarAgendamentos() {
             const conteudo = document.getElementById('agendamentosConteudo');
@@ -355,7 +365,7 @@ verificar_login();
                             <div class="card">
                                 <h3>Aula Teste Agendada</h3>
                                 <div class="card-info">
-                                    <strong>Data:</strong> ${formatarData(agendamento.data_agendamento)}<br>
+                                    <strong>Data:</strong> ${agendamento.dias_semana}<br>
                                     <strong>Horário:</strong> ${agendamento.horario}<br>
                                     <strong>Nível:</strong> ${agendamento.nivel}
                                 </div>

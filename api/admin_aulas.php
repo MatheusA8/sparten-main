@@ -21,6 +21,7 @@ if ($metodo === 'GET') {
                 modalidade,
                 nome,
                 instrutor,
+                dias_semana,
                 horario,
                 nivel,
                 capacidade,
@@ -56,6 +57,14 @@ if ($metodo === 'POST') {
         $modalidade = isset($_POST['modalidade']) ? sanitizar($_POST['modalidade']) : '';
         $nome       = isset($_POST['nome']) ? sanitizar($_POST['nome']) : '';
         $instrutor  = isset($_POST['instrutor']) ? sanitizar($_POST['instrutor']) : '';
+        $dias_semana = isset($_POST['dias_semana']) ? $_POST['dias_semana'] : [];
+
+        if (!is_array($dias_semana) || empty($dias_semana)) {
+            resposta_json(false, 'Selecione pelo menos um dia da semana');
+        }
+
+        $dias_semana = implode(',', $dias_semana);
+        $dias_semana = sanitizar($dias_semana);
         $horario    = isset($_POST['horario']) ? sanitizar($_POST['horario']) : '';
         $nivel      = isset($_POST['nivel']) ? sanitizar($_POST['nivel']) : '';
         $capacidade = isset($_POST['capacidade']) ? (int)$_POST['capacidade'] : 0;
@@ -66,6 +75,7 @@ if ($metodo === 'POST') {
             empty($modalidade) ||
             empty($nome) ||
             empty($instrutor) ||
+            empty($dias_semana) ||
             empty($horario) ||
             empty($nivel) ||
             $capacidade <= 0
@@ -84,15 +94,16 @@ if ($metodo === 'POST') {
         // Inserir aula
         $stmt = $conexao->prepare("
             INSERT INTO aulas
-                (modalidade, nome, instrutor, horario, nivel, capacidade, descricao)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+                (modalidade, nome, instrutor, dias_semana, horario, nivel, capacidade, descricao)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->bind_param(
-            "sssssis",
+            "ssssssis",
             $modalidade,
             $nome,
             $instrutor,
+            $dias_semana,
             $horario,
             $nivel,
             $capacidade,
@@ -117,6 +128,12 @@ if ($metodo === 'POST') {
         $modalidade = isset($_POST['modalidade']) ? sanitizar($_POST['modalidade']) : '';
         $nome       = isset($_POST['nome']) ? sanitizar($_POST['nome']) : '';
         $instrutor  = isset($_POST['instrutor']) ? sanitizar($_POST['instrutor']) : '';
+        $dias_semana = isset($_POST['dias_semana']) ? $_POST['dias_semana'] : [];
+        if (!is_array($dias_semana) || empty($dias_semana)) {
+            resposta_json(false, 'Selecione pelo menos um dia da semana');
+        }
+        $dias_semana = implode(',', $dias_semana);
+        $dias_semana = sanitizar($dias_semana);
         $horario    = isset($_POST['horario']) ? sanitizar($_POST['horario']) : '';
         $nivel      = isset($_POST['nivel']) ? sanitizar($_POST['nivel']) : '';
         $capacidade = isset($_POST['capacidade']) ? (int)$_POST['capacidade'] : 0;
@@ -127,6 +144,7 @@ if ($metodo === 'POST') {
             empty($modalidade) ||
             empty($nome) ||
             empty($instrutor) ||
+            empty($dias_semana) ||
             empty($horario) ||
             empty($nivel) ||
             $capacidade <= 0
@@ -140,6 +158,7 @@ if ($metodo === 'POST') {
                 modalidade = ?,
                 nome = ?,
                 instrutor = ?,
+                dias_semana = ?,
                 horario = ?,
                 nivel = ?,
                 capacidade = ?,
@@ -148,10 +167,11 @@ if ($metodo === 'POST') {
         ");
 
         $stmt->bind_param(
-            "sssssisi",
+            "ssssssis",
             $modalidade,
             $nome,
             $instrutor,
+            $dias_semana,
             $horario,
             $nivel,
             $capacidade,
