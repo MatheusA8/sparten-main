@@ -12,6 +12,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../sparten-main/style/style.css">
     <title>Sparten</title>
+    <link rel="icon" type="image/png" href="../sparten-main/images/Captura de tela 2025-09-12 210131-Photoroom.png">
+
+
 </head>
 <body>
     <!-- Logo flutuante atrás do conteúdo -->
