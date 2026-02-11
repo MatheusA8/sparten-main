@@ -1,7 +1,10 @@
 <?php
-session_start();
-?>
+require_once 'api/auth.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,24 +18,35 @@ session_start();
 <img src="../sparten-main/images/Captura de tela 2025-09-12 210131-Photoroom.png" alt="Logo" class="logo-flutuante-global">
 
     <!-- Header fixo -->
-    <header>    
-        <button class="menu-btn">•••</button>
-        <ul class="menu">
-            <li><a href="#inicio">INÍCIO</a></li>
-            <li><a href="#sobre">SOBRE</a></li>
-            <li><a href="#planos">PLANOS E VALORES</a></li>
-            <li><a href="#estrutura">ESTRUTURA</a></li>
-            <li><a href="#servicos">SERVIÇOS</a></li>
-            <li><a href="#equipe">EQUIPE</a></li>
-            <li><a href="#clientes">CLIENTES</a></li>
-            <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
-            <li><a href="#horarios">HORÁRIOS</a></li>
-            <li><a href="#contatos">CONTATOS</a></li>
+<header>    
+    <button class="menu-btn">•••</button>
+    <ul class="menu">
+        <li><a href="#inicio">INÍCIO</a></li>
+        <li><a href="#sobre">SOBRE</a></li>
+        <li><a href="#planos">PLANOS E VALORES</a></li>
+        <li><a href="#estrutura">ESTRUTURA</a></li>
+        <li><a href="#servicos">SERVIÇOS</a></li>
+        <li><a href="#equipe">EQUIPE</a></li>
+        <li><a href="#clientes">CLIENTES</a></li>
+        <li><a href="#localizacao">LOCALIZAÇÃO</a></li>
+        <li><a href="#horarios">HORÁRIOS</a></li>
+        <li><a href="#contatos">CONTATOS</a></li>
+
+        <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin'): ?>
+            <li><a href="admin.php" class="dashboard-btn">PAINEL ADMIN</a></li>
+        <?php else: ?>
             <li><a href="dashboard.php" class="dashboard-btn">DASHBOARD</a></li>
-            <li><a href="api/logout.php" class="logout-btn" onclick="return confirm('Tem certeza que deseja Deslogar?')">Deslogar</a></li>
-        </ul>
-        
-    </header>
+        <?php endif; ?>
+
+        <li>
+            <a href="api/logout.php" 
+               class="logout-btn" 
+               onclick="return confirm('Tem certeza que deseja Deslogar?')">
+               Deslogar
+            </a>
+        </li>
+    </ul>
+</header>
     <!-- Conteúdo centralizado -->
     <main id="inicio">
         <h1>ACADEMIA SPARTEN</h1>
@@ -96,7 +110,7 @@ session_start();
         <div class="estrutura-card">
             <h3>1º Andar</h3>
             <p>Treinos focados em força, resistência e performance.</p>
-            <img src="../sparten-main/images/pngwing.com.png" alt="1º Andar">
+            <img src="../sparten-main/images/1AndarAcademia.jpeg" alt="1º Andar">
         </div>
 
         <!-- 2º Andar -->
@@ -110,7 +124,7 @@ session_start();
         <div class="estrutura-card novidade">
             <h3>3º Andar</h3>
             <p>Spinning, Treino Funcional e Step Dance para superar seus limites.</p>
-            <img src="../sparten-main/images/3d-question-mark-icon-or-ask-faq-answer-solution-isolated-on-transparent-background-file-png.webp" alt="3º Andar">
+            <img src="../sparten-main/images/3AndarAcademia.jpeg" alt="3º Andar">
 
         </div>
     </div>
@@ -185,9 +199,9 @@ session_start();
             </div>
         </div>
         <div class="membro">
-            <div class="membro-header">Mirela</div>
+            <div class="membro-header">Váleria</div>
             <div class="membro-body">
-                <img src="../sparten-main/images/Valeria.jpeg" alt="Mirela">
+                <img src="../sparten-main/images/Valeria.jpeg" alt="Váleria">
                 <p>Váleria faz tudo com empenho e coração, motivando e organizando as atividades da academia, ajudando todos a alcançarem seus objetivos.</p>
             </div>
         </div>
@@ -242,7 +256,7 @@ session_start();
         <div id="status-circle"></div>
         <div class="status-info">
             <span id="status-text">Carregando...</span>
-            <p>Seg - Sex: 5h às 22h <br> Sáb: 7h às 12h</p>
+            <p>Seg - Sex: 5h às 22h <br> Sáb: 7h às 15h <br> Dom: 17h às 19h</p>
         </div>
     </div>
 </section>

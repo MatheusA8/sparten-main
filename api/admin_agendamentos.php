@@ -13,15 +13,30 @@ $acao = isset($_GET['acao']) ? sanitizar($_GET['acao']) : '';
 
 // GET - Obter agendamentos
 if ($metodo === 'GET') {
+
     $filtro = isset($_GET['filtro']) ? sanitizar($_GET['filtro']) : 'confirmado';
 
-    $sql = "SELECT id, codigo_unico, nome, email, telefone, data_agendamento, horario, nivel, status, data_criacao FROM agendamentos_teste";
-    
+    $sql = "
+        SELECT 
+            ag.id,
+            ag.codigo_unico,
+            ag.status,
+            ag.data_criacao,
+            u.nome,
+            u.email,
+            u.telefone,
+            a.nome AS nome_aula,
+            a.horario
+        FROM agendamentos_teste ag
+        LEFT JOIN usuarios u ON ag.usuario_id = u.id
+        LEFT JOIN aulas a ON ag.aula_id = a.id
+    ";
+
     if ($filtro !== 'todos') {
-        $sql .= " WHERE status = '$filtro'";
+        $sql .= " WHERE ag.status = '$filtro'";
     }
-    
-    $sql .= " ORDER BY data_agendamento DESC";
+
+    $sql .= " ORDER BY ag.data_criacao DESC";
 
     $resultado = $conexao->query($sql);
 
@@ -37,6 +52,7 @@ if ($metodo === 'GET') {
     resposta_json(true, 'Agendamentos carregados com sucesso', $agendamentos);
 }
 
+
 // POST - Marcar como realizado ou cancelar
 if ($metodo === 'POST') {
     
@@ -48,8 +64,25 @@ if ($metodo === 'POST') {
             resposta_json(false, 'ID do agendamento inválido');
         }
 
-        $stmt = $conexao->prepare("UPDATE agendamentos_teste SET status = 'realizado' WHERE id = ?");
-        $stmt->bind_param("i", $id);
+        $stmt = $conexao->prepare("
+            SELECT 
+                ag.id,
+                ag.codigo_unico,
+                ag.status,
+                ag.data_criacao,
+                u.nome AS nome,
+                u.email AS email,
+                u.telefone AS telefone,
+                a.nome AS nome_aula,
+                a.horario AS horario
+            FROM agendamentos_teste ag
+            LEFT JOIN usuarios u ON ag.usuario_id = u.id
+            LEFT JOIN aulas a ON ag.aula_id = a.id
+            ORDER BY ag.data_criacao DESC
+        ");
+
+
+
 
         if ($stmt->execute()) {
             resposta_json(true, 'Agendamento marcado como realizado!');

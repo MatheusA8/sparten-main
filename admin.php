@@ -295,6 +295,37 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
                 font-size: 0.75rem;
             }
         }
+
+        @media (max-width: 768px) {
+        
+            table {
+                display: none;
+            }
+        
+            .agendamento-card {
+                background: #111;
+                border: 1px solid red;
+                border-radius: 12px;
+                padding: 15px;
+                margin-bottom: 15px;
+                color: white;
+            }
+        
+            .agendamento-card p {
+                margin: 5px 0;
+                font-size: 14px;
+            }
+        
+            .card-buttons {
+                margin-top: 10px;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+        
+        }
+
+        
     </style>
 </head>
 <body>
@@ -540,20 +571,24 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             try {
                 const response = await fetch(`api/admin_agendamentos.php?filtro=${filtro}`);
                 const data = await response.json();
+                console.log(data);
+
 
                 loading.style.display = 'none';
 
                 if (data.sucesso && data.dados.length > 0) {
-                    let html = '<table class="tabela"><thead><tr><th>Código</th><th>Nome</th><th>Email</th><th>Data</th><th>Horário</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+                    let html = '<table class="tabela"><thead><tr><th>Código</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Aula</th><th>Data</th><th>Horário</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
                     data.dados.forEach(agendamento => {
                         html += `
                             <tr>
                                 <td><strong>${agendamento.codigo_unico}</strong></td>
-                                <td>${agendamento.nome}</td>
-                                <td>${agendamento.email}</td>
-                                <td>${agendamento.data_agendamento}</td>
-                                <td>${agendamento.horario}</td>
-                                <td>${agendamento.status}</td>
+                                    <td>${agendamento.nome}</td>
+                                    <td>${agendamento.email}</td>
+                                    <td>${agendamento.telefone}</td>
+                                    <td>${agendamento.nome_aula}</td>
+                                    <td>${agendamento.data_criacao}</td>
+                                    <td>${agendamento.horario}</td>
+                                    <td>${agendamento.status}</td>
                                 <td>
                                     ${agendamento.status === 'confirmado' ? `
                                         <button class="btn-acao verde" onclick="marcarRealizado(${agendamento.id})">Realizado</button>
@@ -563,6 +598,7 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
                                     `}
                                 </td>
                             </tr>
+
                         `;
                     });
                     html += '</tbody></table>';

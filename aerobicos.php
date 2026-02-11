@@ -348,7 +348,7 @@ $isAvulsa = ($tipo === 'avulsa');
         const container = document.getElementById('aulasContainer');
 
         try {
-            const response = await fetch('api/get_aulas.php?modalidade=funcional');
+            const response = await fetch('api/get_aulas.php?modalidade=aerobicos');
             const data = await response.json();
 
             if (data.sucesso && data.dados.length > 0) {

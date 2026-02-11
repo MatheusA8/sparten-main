@@ -30,22 +30,38 @@ $aulas = [];
 
 while ($aula = $resultado->fetch_assoc()) {
 
-    // Contar inscrições
-    $stmtCount = $conexao->prepare("
+    // Contar inscritos fixos
+    $stmtFixos = $conexao->prepare("
         SELECT COUNT(*) as total
         FROM inscricoes
         WHERE aula_id = ? AND status = 'confirmado'
     ");
-    $stmtCount->bind_param("i", $aula['id']);
-    $stmtCount->execute();
-    $count_resultado = $stmtCount->get_result();
-    $count = $count_resultado->fetch_assoc();
-
-    $aula['inscritos'] = (int)$count['total'];
-    $aula['vagas_disponiveis'] = $aula['capacidade'] - $aula['inscritos'];
-
+    $stmtFixos->bind_param("i", $aula['id']);
+    $stmtFixos->execute();
+    $fixos = $stmtFixos->get_result()->fetch_assoc()['total'];
+    $stmtFixos->close();
+    
+    // Contar avulsos
+    $stmtAvulsos = $conexao->prepare("
+        SELECT COUNT(*) as total
+        FROM agendamentos_teste
+        WHERE aula_id = ? AND status = 'confirmado'
+    ");
+    $stmtAvulsos->bind_param("i", $aula['id']);
+    $stmtAvulsos->execute();
+    $avulsos = $stmtAvulsos->get_result()->fetch_assoc()['total'];
+    $stmtAvulsos->close();
+    
+    // Total ocupadas
+    $totalOcupadas = $fixos + $avulsos;
+    
+    // Atualizar dados da aula
+    $aula['inscritos'] = $totalOcupadas;
+    $aula['vagas_disponiveis'] = $aula['capacidade'] - $totalOcupadas;
+    
     $aulas[] = $aula;
-}
+    
+    }
 
 resposta_json(true, 'Aulas carregadas com sucesso', $aulas);
 
