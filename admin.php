@@ -1,7 +1,6 @@
 <?php
-session_start();
-require_once __DIR__ . '/api/auth.php';
-verificar_login();
+require_once 'api/auth.php';
+verificar_admin();
 
 
 // se não estiver logado

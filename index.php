@@ -1,16 +1,13 @@
 <?php
-require_once 'api/auth.php';
+session_start();
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// 🔥 Verifica se está logado
-if (isset($_SESSION['usuario_id'])) {
-    header("Location: dashboard.php");
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: login.html");
     exit;
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>

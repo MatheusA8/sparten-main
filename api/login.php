@@ -3,7 +3,7 @@
 // LOGIN DE USUÁRIOS
 // =====================================================
 
-require_once 'config.php';
+require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json');
 
@@ -15,6 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ]);
     exit;
 }
+
+// 🔐 Inicia sessão segura
+iniciar_sessao_segura();
 
 // 📩 Dados
 $email = isset($_POST['email']) ? sanitizar($_POST['email']) : '';
@@ -39,10 +42,11 @@ if (empty($senha)) {
 
 // 🔍 Busca usuário
 $stmt = $conexao->prepare("
-    SELECT id, nome, email, telefone, senha, tipo
+    SELECT id, nome, email, senha, tipo
     FROM usuarios
     WHERE email = ? AND status = 'ativo'
 ");
+
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $resultado = $stmt->get_result();
@@ -66,23 +70,21 @@ if (!verificar_senha($senha, $usuario['senha'])) {
     exit;
 }
 
-// 🔒 Sessão
-iniciar_sessao_segura();
-
+// 🔒 Cria sessão
 $_SESSION['logado'] = true;
 $_SESSION['usuario_id'] = $usuario['id'];
 $_SESSION['usuario_nome'] = $usuario['nome'];
 $_SESSION['usuario_email'] = $usuario['email'];
 $_SESSION['usuario_tipo'] = $usuario['tipo'];
 
-// 🚦 Redirecionamento ABSOLUTO (isso resolve 90% dos bugs)
-$redirect = '/sparten-main/dashboard.php';
+// 🚦 Define redirecionamento
+$redirect = 'admin.php';
 
 if ($usuario['tipo'] === 'admin') {
     $redirect = '/sparten-main/admin.php';
 }
 
-// ✅ Resposta FINAL padronizada
+// ✅ Resposta final
 echo json_encode([
     'sucesso' => true,
     'mensagem' => 'Login realizado com sucesso',

@@ -1,4 +1,5 @@
 <?php
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -6,11 +7,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function verificar_login() {
     if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-        header("Location: index.php");
+        header("Location: login.html");
         exit;
     }
 }
-
 
 function verificar_admin() {
     verificar_login();
