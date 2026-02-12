@@ -273,54 +273,30 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
             color: #ff3333;
             border: 1px solid #ff3333;
         }
+        .tabela-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        }
+
 
         @media (max-width: 768px) {
-            .admin-header h1 { font-size: 1.8rem; }
-
-            /* Esconde a tabela no mobile */
-            .tabela-wrapper { display: none; }
-
-            /* Estilização dos Cards */
-            .agendamentos-container-cards {
-                display: block;
+        
+            .tabela {
+                font-size: 0.85rem;
             }
-
-            .agendamento-card {
-                background: rgba(255, 0, 0, 0.05);
-                border: 1px solid #ff0000;
-                border-radius: 12px;
-                padding: 15px;
-                margin-bottom: 15px;
-                color: white;
+        
+            .tabela th,
+            .tabela td {
+                padding: 8px 6px;
+                white-space: nowrap;
             }
-
-            .agendamento-card p {
-                margin: 8px 0;
-                font-size: 14px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                padding-bottom: 4px;
-            }
-
-            .agendamento-card p strong {
-                color: #ff0000;
-                text-transform: uppercase;
-                font-size: 12px;
-                display: block;
-            }
-
-            .card-buttons {
-                margin-top: 15px;
-                display: flex;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-
-            .card-buttons .btn-acao {
-                flex: 1;
-                padding: 10px;
-                text-align: center;
+        
+            .btn-acao {
+                padding: 5px 8px;
+                font-size: 0.75rem;
             }
         }
+
 
         /* No desktop, esconde os cards */
         @media (min-width: 769px) {
@@ -537,7 +513,7 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
                 loading.style.display = 'none';
 
                 if (data.sucesso && data.dados.length > 0) {
-                    let html = '<table class="tabela"><thead><tr><th>Nome</th><th>Instrutor</th><th>Horário</th><th>Nível</th><th>Capacidade</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
+                    let html = '<div class="tabela-wrapper"><table class="tabela"><thead><tr><th>Nome</th><th>Instrutor</th><th>Horário</th><th>Nível</th><th>Capacidade</th><th>Status</th><th>Ações</th></tr></thead><tbody>';
                     data.dados.forEach(aula => {
                         html += `
                             <tr>
@@ -554,7 +530,7 @@ if ($_SESSION['usuario_tipo'] !== 'admin') {
                             </tr>
                         `;
                     });
-                    html += '</tbody></table>';
+                    html += '</tbody></table></div>';
                     container.innerHTML = html;
                 } else {
                     container.innerHTML = '<p style="color: #fff;">Nenhuma aula cadastrada</p>';
